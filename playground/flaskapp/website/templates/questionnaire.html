@@ -1,0 +1,253 @@
+{% extends "base.html"  %}
+{% block title %}
+    Quesionnaire
+{% endblock %}
+
+{% block content%}
+<head>
+    <style>
+        .container {
+            margin-top: 20px;
+        }
+        .question {
+            margin-bottom: 15px;
+        }
+        .questionnaire-section {
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="mb-4">Personality and Travel Interest Questionnaire</h2>
+        <form id="questionnaireForm">
+            <!-- Basic Information Section -->
+            <div class="questionnaire-section">
+                <h4>Basic Information</h4>
+                <div class="question">
+                    <label for="ageRange" class="form-label">What is your age range?</label>
+                    <select class="form-select" id="ageRange" name="ageRange">
+                        <option value="">Select an age range</option>
+                        <option value="18-24">18-24</option>
+                        <option value="25-34">25-34</option>
+                        <option value="35-44">35-44</option>
+                        <option value="45-54">45-54</option>
+                        <option value="55-64">55-64</option>
+                        <option value="65+">65+</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Personality Questions Section -->
+            <div class="questionnaire-section">
+                <h4>Personality Questions (Big Five Traits)</h4>
+                
+                <!-- Openness -->
+                <div class="question">
+                    <p>I enjoy trying new things and experiencing variety in life.</p>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="openness" id="openness1" value="strongly_disagree">
+                        <label class="form-check-label" for="openness1">Strongly disagree</label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="openness" id="openness2" value="strongly_disagree">
+                        <label class="form-check-label" for="openness2">Disagree</label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="openness" id="openness3" value="strongly_disagree">
+                        <label class="form-check-label" for="openness3">Neutral</label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="openness" id="openness4" value="strongly_disagree">
+                        <label class="form-check-label" for="openness4">Agree</label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="openness" id="openness5" value="strongly_disagree">
+                        <label class="form-check-label" for="openness5">Strongly agree</label>
+                    </div>
+                </div>
+
+                <!-- Conscientiousness -->
+                <div class="question">
+                    <p>I like to plan things in advance and am well-organized.</p>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="conscientiousness" id="conscientiousness1" value="strongly_disagree">
+                        <label class="form-check-label" for="conscientiousness1">Strongly disagree</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="conscientiousness" id="conscientiousness2" value="strongly_disagree">
+                        <label class="form-check-label" for="conscientiousness2">Disagree</label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="conscientiousness" id="conscientiousness3" value="strongly_disagree">
+                        <label class="form-check-label" for="conscientiousness3">Neutral</label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="conscientiousness" id="conscientiousness4" value="strongly_disagree">
+                        <label class="form-check-label" for="conscientiousness4">Agree</label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="conscientiousness" id="conscientiousness5" value="strongly_disagree">
+                        <label class="form-check-label" for="conscientiousness5"> Strongly agree </label>
+                    </div>
+                    <!-- Other options omitted for brevity -->
+                </div>
+
+                <!-- Extraversion -->
+
+                <div class="question">
+                    <p>I feel energized when interacting with a lot of people.</p>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="extraversion" id="extraversion1" value="strongly_disagree">
+                        <label class="form-check-label" for="extraversion1">Strongly disagree</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="extraversion" id="extraversion2" value="disagree">
+                        <label class="form-check-label" for="extraversion2">Disagree</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="extraversion" id="extraversion3" value="neutral">
+                        <label class="form-check-label" for="extraversion3">Neutral</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="extraversion" id="extraversion4" value="agree">
+                        <label class="form-check-label" for="extraversion4">Agree</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="extraversion" id="extraversion5" value="strongly_agree">
+                        <label class="form-check-label" for="extraversion5">Strongly agree</label>
+                    </div>
+                </div>
+
+                <!-- Agreeableness -->
+                <div class="question">
+                <p>I consider myself empathetic and cooperative with others.</p>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="agreeableness" id="agreeableness1" value="strongly_disagree">
+                    <label class="form-check-label" for="agreeableness1">Strongly disagree</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="agreeableness" id="agreeableness2" value="disagree">
+                    <label class="form-check-label" for="agreeableness2">Disagree</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="agreeableness" id="agreeableness3" value="neutral">
+                    <label class="form-check-label" for="agreeableness3">Neutral</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="agreeableness" id="agreeableness4" value="agree">
+                    <label class="form-check-label" for="agreeableness4">Agree</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="agreeableness" id="agreeableness5" value="strongly_agree">
+                    <label class="form-check-label" for="agreeableness5">Strongly agree</label>
+                </div>
+            </div>
+            
+            
+
+
+                
+
+                <!-- Neuroticism -->
+
+                <div class="question">
+                    <p>I often feel anxious or easily get upset over small things.</p>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="neuroticism" id="neuroticism1" value="strongly_disagree">
+                        <label class="form-check-label" for="neuroticism1">Strongly disagree</label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="neuroticism" id="neuroticism2" value="disagree">
+                        <label class="form-check-label" for="neuroticism2">Disagree</label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="neuroticism" id="neuroticism3" value="neutral">
+                        <label class="form-check-label" for="neuroticism3">Neutral</label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="neuroticism" id="neuroticism4" value="agree">
+                        <label class="form-check-label" for="neuroticism4">Agree</label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="neuroticism" id="neuroticism5" value="strongly_agree">
+                        <label class="form-check-label" for="neuroticism5">Strongly agree</label>
+                    </div>
+
+
+
+
+
+                     
+
+
+
+                </div>
+                
+            </div>
+
+            <!-- Travel Preferences Section -->
+            <div class="questionnaire-section">
+                <h4>Travel Preferences</h4>
+                <div class="question">
+                    <label class="form-label">Which of these activities interest you the most during a vacation? (Select all that apply)</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="activityHistorical" name="activityPreference" value="historical_sites">
+                        <label class="form-check-label" for="activityHistorical">Exploring historical sites</label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="activityOutdoor" name="activityPreferences" value="outdoor_adventures">
+                        <label class="form-check-label" for="activityOutdoor">Engaging in outdoor adventures</label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="activityBeach" name="activityPreferences" value="relaxing_beach">
+                        <label class="form-check-label" for="activityBeach">Relaxing on a beach</label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="activityCuisine" name="activityPreferences" value="local_cuisine">
+                        <label class="form-check-label" for="activityCuisine">Experiencing local cuisine and shopping</label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="activityCultural" name="activityPreferences" value="cultural_events">
+                        <label class="form-check-label" for="activityCultural">Participating in cultural events or festivals</label>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#questionnaireForm').on('submit', function(e) {
+                e.preventDefault();
+                // Add your form submission logic here
+                alert('Form submitted!');
+            });
+        });
+    </script>
+</body>
+
+
+
+            
+
+           
+{% endblock %}
