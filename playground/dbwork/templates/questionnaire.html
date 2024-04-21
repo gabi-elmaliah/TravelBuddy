@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>Personality Questionnaire</h1>
-    <form>
+    <form method="POST" action="#">
         <h2>Openness</h2>
         <label>I enjoy exploring new places and trying new things.</label><br>
         <input type="radio" name="openness" value="1"> Strongly disagree<br>
@@ -47,6 +47,12 @@
         <input type="radio" name="neuroticism" value="3"> Neutral<br>
         <input type="radio" name="neuroticism" value="4"> Agree<br>
         <input type="radio" name="neuroticism" value="5"> Strongly agree<br>
+        <input type="submit" name="SubmitBtn"><br>
     </form>
+     <!-- Display error message if it exists -->
+     {% if error %}
+     <p style="color: red;">{{ error }}</p>
+     {% endif %}
+
 </body>
 </html>

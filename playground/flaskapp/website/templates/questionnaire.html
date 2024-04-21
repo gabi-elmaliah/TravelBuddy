@@ -20,13 +20,13 @@
 <body>
     <div class="container">
         <h2 class="mb-4">Personality and Travel Interest Questionnaire</h2>
-        <form id="questionnaireForm">
+        <form id="questionnaireForm" method="POST">
             <!-- Basic Information Section -->
             <div class="questionnaire-section">
                 <h4>Basic Information</h4>
                 <div class="question">
                     <label for="ageRange" class="form-label">What is your age range?</label>
-                    <select class="form-select" id="ageRange" name="ageRange">
+                    <select class="form-select" id="ageRange" name="ageRange" required>
                         <option value="">Select an age range</option>
                         <option value="18-24">18-24</option>
                         <option value="25-34">25-34</option>
@@ -46,27 +46,27 @@
                 <div class="question">
                     <p>I enjoy trying new things and experiencing variety in life.</p>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="openness" id="openness1" value="strongly_disagree">
+                        <input class="form-check-input" type="radio" name="openness" id="openness1" value="1" required>
                         <label class="form-check-label" for="openness1">Strongly disagree</label>
                     </div>
 
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="openness" id="openness2" value="strongly_disagree">
+                        <input class="form-check-input" type="radio" name="openness" id="openness2" value="2">
                         <label class="form-check-label" for="openness2">Disagree</label>
                     </div>
 
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="openness" id="openness3" value="strongly_disagree">
+                        <input class="form-check-input" type="radio" name="openness" id="openness3" value="3">
                         <label class="form-check-label" for="openness3">Neutral</label>
                     </div>
 
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="openness" id="openness4" value="strongly_disagree">
+                        <input class="form-check-input" type="radio" name="openness" id="openness4" value="4">
                         <label class="form-check-label" for="openness4">Agree</label>
                     </div>
 
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="openness" id="openness5" value="strongly_disagree">
+                        <input class="form-check-input" type="radio" name="openness" id="openness5" value="5">
                         <label class="form-check-label" for="openness5">Strongly agree</label>
                     </div>
                 </div>
@@ -75,26 +75,26 @@
                 <div class="question">
                     <p>I like to plan things in advance and am well-organized.</p>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="conscientiousness" id="conscientiousness1" value="strongly_disagree">
+                        <input class="form-check-input" type="radio" name="conscientiousness" id="conscientiousness1" value="1">
                         <label class="form-check-label" for="conscientiousness1">Strongly disagree</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="conscientiousness" id="conscientiousness2" value="strongly_disagree">
+                        <input class="form-check-input" type="radio" name="conscientiousness" id="conscientiousness2" value="2">
                         <label class="form-check-label" for="conscientiousness2">Disagree</label>
                     </div>
 
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="conscientiousness" id="conscientiousness3" value="strongly_disagree">
+                        <input class="form-check-input" type="radio" name="conscientiousness" id="conscientiousness3" value="3">
                         <label class="form-check-label" for="conscientiousness3">Neutral</label>
                     </div>
 
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="conscientiousness" id="conscientiousness4" value="strongly_disagree">
+                        <input class="form-check-input" type="radio" name="conscientiousness" id="conscientiousness4" value="4">
                         <label class="form-check-label" for="conscientiousness4">Agree</label>
                     </div>
 
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="conscientiousness" id="conscientiousness5" value="strongly_disagree">
+                        <input class="form-check-input" type="radio" name="conscientiousness" id="conscientiousness5" value="5">
                         <label class="form-check-label" for="conscientiousness5"> Strongly agree </label>
                     </div>
                     <!-- Other options omitted for brevity -->
@@ -105,23 +105,23 @@
                 <div class="question">
                     <p>I feel energized when interacting with a lot of people.</p>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="extraversion" id="extraversion1" value="strongly_disagree">
+                        <input class="form-check-input" type="radio" name="extraversion" id="extraversion1" value="1">
                         <label class="form-check-label" for="extraversion1">Strongly disagree</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="extraversion" id="extraversion2" value="disagree">
+                        <input class="form-check-input" type="radio" name="extraversion" id="extraversion2" value="2">
                         <label class="form-check-label" for="extraversion2">Disagree</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="extraversion" id="extraversion3" value="neutral">
+                        <input class="form-check-input" type="radio" name="extraversion" id="extraversion3" value="3">
                         <label class="form-check-label" for="extraversion3">Neutral</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="extraversion" id="extraversion4" value="agree">
+                        <input class="form-check-input" type="radio" name="extraversion" id="extraversion4" value="4">
                         <label class="form-check-label" for="extraversion4">Agree</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="extraversion" id="extraversion5" value="strongly_agree">
+                        <input class="form-check-input" type="radio" name="extraversion" id="extraversion5" value="5">
                         <label class="form-check-label" for="extraversion5">Strongly agree</label>
                     </div>
                 </div>
@@ -130,23 +130,23 @@
                 <div class="question">
                 <p>I consider myself empathetic and cooperative with others.</p>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="agreeableness" id="agreeableness1" value="strongly_disagree">
+                    <input class="form-check-input" type="radio" name="agreeableness" id="agreeableness1" value="1">
                     <label class="form-check-label" for="agreeableness1">Strongly disagree</label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="agreeableness" id="agreeableness2" value="disagree">
+                    <input class="form-check-input" type="radio" name="agreeableness" id="agreeableness2" value="2">
                     <label class="form-check-label" for="agreeableness2">Disagree</label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="agreeableness" id="agreeableness3" value="neutral">
+                    <input class="form-check-input" type="radio" name="agreeableness" id="agreeableness3" value="3">
                     <label class="form-check-label" for="agreeableness3">Neutral</label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="agreeableness" id="agreeableness4" value="agree">
+                    <input class="form-check-input" type="radio" name="agreeableness" id="agreeableness4" value="4">
                     <label class="form-check-label" for="agreeableness4">Agree</label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="agreeableness" id="agreeableness5" value="strongly_agree">
+                    <input class="form-check-input" type="radio" name="agreeableness" id="agreeableness5" value="5">
                     <label class="form-check-label" for="agreeableness5">Strongly agree</label>
                 </div>
             </div>
@@ -161,27 +161,27 @@
                 <div class="question">
                     <p>I often feel anxious or easily get upset over small things.</p>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="neuroticism" id="neuroticism1" value="strongly_disagree">
+                        <input class="form-check-input" type="radio" name="neuroticism" id="neuroticism1" value="1">
                         <label class="form-check-label" for="neuroticism1">Strongly disagree</label>
                     </div>
 
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="neuroticism" id="neuroticism2" value="disagree">
+                        <input class="form-check-input" type="radio" name="neuroticism" id="neuroticism2" value="2">
                         <label class="form-check-label" for="neuroticism2">Disagree</label>
                     </div>
 
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="neuroticism" id="neuroticism3" value="neutral">
+                        <input class="form-check-input" type="radio" name="neuroticism" id="neuroticism3" value="3">
                         <label class="form-check-label" for="neuroticism3">Neutral</label>
                     </div>
 
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="neuroticism" id="neuroticism4" value="agree">
+                        <input class="form-check-input" type="radio" name="neuroticism" id="neuroticism4" value="4">
                         <label class="form-check-label" for="neuroticism4">Agree</label>
                     </div>
 
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="neuroticism" id="neuroticism5" value="strongly_agree">
+                        <input class="form-check-input" type="radio" name="neuroticism" id="neuroticism5" value="5">
                         <label class="form-check-label" for="neuroticism5">Strongly agree</label>
                     </div>
 
@@ -203,46 +203,39 @@
                 <div class="question">
                     <label class="form-label">Which of these activities interest you the most during a vacation? (Select all that apply)</label>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="activityHistorical" name="activityPreference" value="historical_sites">
+                        <input class="form-check-input" type="checkbox" id="activityHistorical" name="historical_sites" value="1">
                         <label class="form-check-label" for="activityHistorical">Exploring historical sites</label>
                     </div>
 
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="activityOutdoor" name="activityPreferences" value="outdoor_adventures">
+                        <input class="form-check-input" type="checkbox" id="activityOutdoor" name="outdoor_adventures" value="1">
                         <label class="form-check-label" for="activityOutdoor">Engaging in outdoor adventures</label>
                     </div>
 
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="activityBeach" name="activityPreferences" value="relaxing_beach">
-                        <label class="form-check-label" for="activityBeach">Relaxing on a beach</label>
+                        <<input class="form-check-input" type="checkbox" id="activityBeach" name="relaxing_beach" value="1">
+                        <label class="form-check-label" for="activityBeach">Realaxing on the beach</label>
                     </div>
 
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="activityCuisine" name="activityPreferences" value="local_cuisine">
+                        <input class="form-check-input" type="checkbox" id="activityCuisine" name="local_cuisine" value="1">
                         <label class="form-check-label" for="activityCuisine">Experiencing local cuisine and shopping</label>
                     </div>
 
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="activityCultural" name="activityPreferences" value="cultural_events">
+                        <input class="form-check-input" type="checkbox" id="activityCultural" name="cultural_events" value="1">
                         <label class="form-check-label" for="activityCultural">Participating in cultural events or festivals</label>
                     </div>
                 </div>
             </div>
+
+            <br />
+            <button type="submit" class="btn btn-primary">Submit</button>  
         </form>
     </div>
 
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('#questionnaireForm').on('submit', function(e) {
-                e.preventDefault();
-                // Add your form submission logic here
-                alert('Form submitted!');
-            });
-        });
-    </script>
+
 </body>
 
 

@@ -3,7 +3,10 @@ from .models import User
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db   ##means from __init__.py import db
 from flask_login import login_user, login_required, logout_user, current_user
+from . import functions
 
+
+import re
 auth=Blueprint('auth',__name__)
 
 @auth.route('/login', methods=['GET','POST'])
@@ -36,6 +39,7 @@ def logout():
 
 @auth.route('/sign-up',methods=['GET','POST'])
 def sign_up():
+       
        if request.method=='POST':
             email=request.form.get('email')
             first_name=request.form.get('firstName')
@@ -45,10 +49,16 @@ def sign_up():
 
             if user:
                  flash('User already exsist', category='error')
+            elif not functions.checkEmail(email):
+                   flash('Your email is inValid', category='error')
             elif len(email)<4:
                 flash('Email must be greater than 3 characters.', category='error')
             elif len(first_name)<2:
                  flash('First name must be greater than 1 character.', category='error')
+            elif len(password1)<4:
+                flash('Passowrd must be greater than 4 characters.', category='error')
+
+
             elif password1!=password2:
              flash('Passwords don\'t match.', category='error')
             elif len(password1)<7:
@@ -58,8 +68,9 @@ def sign_up():
                 db.session.add(new_user)
                 db.session.commit()
                 login_user(new_user,remember=True)
-                flash("you succsess sign up",category='success')
-                return redirect(url_for('views.home'))
+                #flash("you succsess sign up",category='success')  --> later after answering q
+                return redirect(url_for('views.questionnaire'))
+            
                
             
        return render_template("sign_up.html",user=current_user)
