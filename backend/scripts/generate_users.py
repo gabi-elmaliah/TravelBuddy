@@ -1,47 +1,57 @@
-from sqlalchemy import create_engine, Column, Integer, String,Boolean,ForeignKey
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, scoped_session,relationship
-import pandas as pd
-import csv
+import sys
+import os
+sys.path.append(os.path.dirname(__file__)+'/..')
+from website import create_app,db # Assuming create_app is a function in __init__.py that initializes your Flask app
+from website.models import User, PersonalityProfile, UserPreferences
+from werkzeug.security import generate_password_hash
+from flask_sqlalchemy import SQLAlchemy
+from faker import Faker
+import random
 
-Base = declarative_base()
+app = create_app() 
+fake = Faker()
 
+def create_fake_data():
+    with app.app_context():
+        for _ in range(100):
+            # Create fake user data
+            email = fake.email()
+            user_name = fake.user_name()
+            password = fake.password()  # Consider hashing this password before production use
+            # Assign a random budget category
+            new_user = User(
+                email=email,
+                user_name=user_name,
+                password=generate_password_hash(password, method='pbkdf2:sha256'),
+            )
+            db.session.add(new_user)
 
-class User(Base):
+            # Create a personality profile
+            new_profile = PersonalityProfile(
+                user=new_user,
+                age=random.randint(18, 75),
+                budget= random.randint(1,3),
+                openness=random.randint(1, 5),
+                conscientiousness=random.randint(1, 5),
+                extraversion=random.randint(1, 5),
+                agreeableness=random.randint(1, 5),
+                neuroticism=random.randint(1, 5)
+            )
+            db.session.add(new_profile)
 
-    __tablename__="users"
-    id = Column(Integer, primary_key=True)
-    email = Column(String(150), unique=True, nullable=False)
-    user_name = Column(String(150), unique=True, nullable=False)
-    password = Column(String(150), nullable=False)
-    personality_profile = relationship('PersonalityProfile', backref='user', uselist=False, lazy='joined')
-    preferences = relationship('UserPreferences', backref='user', uselist=False, lazy='joined')
-    trip_likes = relationship('UserTripLikes', backref='user', lazy='dynamic')
+            # Create user preferences
+            new_preferences = UserPreferences(
+                user=new_user,
+                activity_historical=fake.boolean(),
+                activity_outdoor=fake.boolean(),
+                activity_beach=fake.boolean(),
+                activity_cuisine=fake.boolean(),
+                activity_cultural=fake.boolean()
+            )
+            db.session.add(new_preferences)
+        # Commit all changes to the database
 
-class PersonalityProfile(Base):
+        db.session.commit()
 
-    __tablename__="personality_profile"
-
-    id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey('user.id'), unique=True)
-    age_range = Column(String(10))
-    openness = Column(Integer)
-    conscientiousness = Column(Integer)
-    extraversion = Column(Integer)
-    agreeableness = Column(Integer)
-    neuroticism = Column(Integer)
-
-class UserPreferences(Base):
-
-
-    __tablename__="personality_preferences"
-
-
-
-    id = Column(Integer, primary_key=True)
-    user_id = Column(Integer,ForeignKey('user.id'), nullable=False)
-    activity_historical = Column(Boolean)
-    activity_outdoor = Column(Boolean)
-    activity_beach = Column(Boolean)
-    activity_cuisine = Column(Boolean)
-    activity_cultural = Column(Boolean)
+if __name__ == '__main__':
+    create_fake_data()
