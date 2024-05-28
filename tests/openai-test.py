@@ -4,7 +4,6 @@ from dotenv import load_dotenv
 
 # Load environment variables from .env file
 load_dotenv()
-client=OpenAI()
 
 # Now you can safely retrieve the API key
 api_key = os.environ.get("OPENAI_API_KEY")

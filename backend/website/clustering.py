@@ -94,3 +94,4 @@ def update_user_clusters(db_path):
     clustered_data = cluster_and_update_db(db_path, data_df)
     print("Clustered data:")
     print(clustered_data.tail(5))  # Display the updated DataFrame with clusters
+    

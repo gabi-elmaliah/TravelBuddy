@@ -1,87 +1,75 @@
 from openai import OpenAI
-import os
-from dotenv import load_dotenv
 
-# Load environment variables from .env file
-load_dotenv()
 
-# Now you can safely retrieve the API key
-api_key = os.environ.get("OPENAI_API_KEY")
-if not api_key:
-    raise ValueError("OPENAI_API_KEY is not set in environment variables.")
-client = OpenAI(api_key=api_key)
+client = OpenAI()
 
-def generate_trip_suggestion(user, data):
-    # Combine the two functions to handle the full trip suggestion generation
-    description = create_trip_description(user, data)
-    suggestion = ask_openai_for_trip(description)
-    return suggestion
 
-def ask_openai_for_trip(prompt):
-    try:
-        # Assuming the 'client' has been set up with your OpenAI API key
-        response = client.chat.completions.create(
-            model="gpt-3.5-turbo-0125",
-            response_format={ "type": "json_object" },
-            messages=[
-                {"role": "system", "content": "You are a travel guide the generate trips in JSON."},
-                {"role": "user", "content": prompt}
-            ]
-        )
-        print(response.choices[0].message.content)
-        return response.choices[0].message.content
-    except Exception as e:
-        print(f"Error querying OpenAI: {e}")
-        return "Sorry, I couldn't generate a trip suggestion right now."
-    
+def create_prompt(personality_profile, user_preferences, destination, start_date, end_date):
+    prompt = f"""
+    Create a detailed trip itinerary in JSON format for a user with the following characteristics:
 
-def create_trip_description(user,data):
-    personality = user.personality_profile
-    preferences = user.preferences
+    Personality Profile:
+    - Age: {personality_profile.age}
+    - Openness: {personality_profile.openness}
+    - Conscientiousness: {personality_profile.conscientiousness}
+    - Extraversion: {personality_profile.extraversion}
+    - Agreeableness: {personality_profile.agreeableness}
+    - Neuroticism: {personality_profile.neuroticism}
 
-    personality_desc = ""
-    if personality:
-        traits = [
-            f"openness level of {personality.openness}" if personality.openness else "",
-            f"conscientiousness level of {personality.conscientiousness}" if personality.conscientiousness else "",
-            f"extraversion level of {personality.extraversion}" if personality.extraversion else "",
-            f"agreeableness level of {personality.agreeableness}" if personality.agreeableness else "",
-            f"neuroticism level of {personality.neuroticism}" if personality.neuroticism else ""
+    Preferences:
+    - Historical Sites: {'Yes' if user_preferences.activity_historical else 'No'}
+    - Outdoor Adventures: {'Yes' if user_preferences.activity_outdoor else 'No'}
+    - Beach: {'Yes' if user_preferences.activity_beach else 'No'}
+    - Local Cuisine and Shopping: {'Yes' if user_preferences.activity_cuisine else 'No'}
+    - Cultural Events or Festivals: {'Yes' if user_preferences.activity_cultural else 'No'}
+
+    Destination: {destination}
+    Dates: From {start_date} to {end_date}
+
+    Provide the response in the following JSON format:
+
+    {{
+        "destination": "{destination}",
+        "start_date": "{start_date}",
+        "end_date": "{end_date}",
+        "trip_details": [
+            {{
+                "day": 1,
+                "date": "{start_date}",
+                "activities": [
+                    {{
+                        "time": "09:00",
+                        "activity": "Visit Historical Museum",
+                        "description": {{
+                            "overview": "Explore the rich history of the city at the Historical Museum.",
+                            "historical_significance": "The museum houses artifacts dating back to the Roman era.",
+                            "tips": "Arrive early to avoid crowds. Don't miss the ancient coin exhibit.",
+                            "location_details": "Located in the city center, easily accessible by public transport."
+                        }}
+                    }},
+                    ...
+                ]
+            }},
+            ...
         ]
-        # Filter out empty strings and join with commas
-        personality_desc = " with a " + ", ".join(filter(None, traits))
-
-
-        # Construct the preferences description
-    preferences_desc = ""
-    if preferences:
-        preferred_activities = []
-        if preferences.activity_historical:
-            preferred_activities.append("historical sites")
-        if preferences.activity_outdoor:
-            preferred_activities.append("outdoor activities")
-        if preferences.activity_beach:
-            preferred_activities.append("beach relaxation")
-        if preferences.activity_cuisine:
-            preferred_activities.append("local cuisines")
-        if preferences.activity_cultural:
-            preferred_activities.append("cultural events")
-
-        if preferred_activities:
-            preferences_desc = " who enjoys " + ", ".join(preferred_activities)
-     # Destination and dates
-    destination = data.get('destination', 'a destination')
-    start_date = data.get('start_date', 'a start date')
-    end_date = data.get('end_date', 'an end date')
-
-    # Combine all parts into one description
-    trip_description = f"Create a travel plan for a person{personality_desc}{preferences_desc}, traveling to {destination} from {start_date} to {end_date}. Suggest activities, dining options, and local experiences that would suit their preferences and personality."
-    
-    return trip_description
-        
+    }}
+    """
+    return prompt
 
 
 
-    
+def generate_trip(prompt):
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo-0125",
+        response_format={ "type": "json_object" },
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant designed to output JSON."},
+            {"role": "user","content":prompt}
 
+
+        ]
+    )
+
+    trip_details= response.choices[0].message.content
+    return trip_details
 

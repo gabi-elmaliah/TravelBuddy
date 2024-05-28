@@ -3,12 +3,17 @@ from flask_sqlalchemy import SQLAlchemy
 from os import path
 from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
-from .utils import get_database_path  
+from .utils import get_database_path 
+
 
 db_path =get_database_path()
 db = SQLAlchemy()
+
+
  
 def create_app():
+
+
 
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'hjshjhdjah kjshkjdhjs'

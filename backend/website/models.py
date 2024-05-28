@@ -9,6 +9,7 @@ class User(db.Model, UserMixin):
     user_name = db.Column(db.String(150), unique=True, nullable=False)
     password = db.Column(db.String(150), nullable=False) 
     cluster=db.Column(db.Integer)
+    trip_id=db.Column(db.Integer,db.ForeignKey('trip.id'))
     personality_profile = db.relationship('PersonalityProfile', backref='user', uselist=False, lazy='joined')
     preferences = db.relationship('UserPreferences', backref='user', uselist=False, lazy='joined')
 
@@ -31,6 +32,16 @@ class UserPreferences(db.Model):
     activity_beach = db.Column(db.Boolean)
     activity_cuisine = db.Column(db.Boolean)
     activity_cultural = db.Column(db.Boolean)
+
+class Trip(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    destination = db.Column(db.String(150), nullable=False)
+    start_date = db.Column(db.Date, nullable=False)
+    end_date = db.Column(db.Date, nullable=False)
+    details = db.Column(db.Text, nullable=False)
+    user=db.relationship('User', backref='trip')
+    
+    
 
 
 
