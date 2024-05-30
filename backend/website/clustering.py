@@ -4,7 +4,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans
 
 def fetch_user_data(db_path):
-    # Connect to the SQLite database
+    # Connect to the SQLite database SSS
     conn = sqlite3.connect(db_path)
     
     query = """
