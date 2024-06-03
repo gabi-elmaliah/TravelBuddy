@@ -46,18 +46,18 @@ def login():
     password = data.get('password')
 
     if not email or not password:
-        return make_response('email and password must be filled',401,{"WWW-Autenthicate":"Basic Realm=email and password must be field"})
+        return jsonify({'message': 'Email and password must be filled'}), 401
     
     user = User.query.filter_by(email=email).first()
     
     if not user:
-        return make_response('user doesnt exsist',401,{"WWW-Autenthicate":"Basic Realm=user doesnt exsist"})
+        return jsonify({'message': 'User does not exist'}), 401
     
     if check_password_hash(user.password,password):
         token=jwt.encode({'user_id':user.id,'exp':datetime.datetime.utcnow()+datetime.timedelta(hours=24)},current_app.config['SECRET_KEY'])
         return jsonify({'token':token.decode("UTF-8")})
     
-    return  make_response('wrong password',401,{"WWW-Autenthicate":"wrong password"})
+    return jsonify({'message': 'Wrong password'}), 401
     
     
     

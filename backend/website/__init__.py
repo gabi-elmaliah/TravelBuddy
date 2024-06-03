@@ -4,6 +4,7 @@ from os import path
 from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
 from .utils import get_database_path 
+from flask_cors import CORS
 
 
 db_path =get_database_path()
@@ -14,10 +15,11 @@ db = SQLAlchemy()
 def create_app():
 
 
-
     app = Flask(__name__)
+    CORS(app)
     app.config['SECRET_KEY'] = 'hjshjhdjah kjshkjdhjs'
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
+
     db.init_app(app)
 
     from .routes import routes

@@ -1,8 +1,9 @@
 from openai import OpenAI
+import os
+from dotenv import load_dotenv,find_dotenv
 
-
-client = OpenAI()
-
+_ = load_dotenv(find_dotenv())
+client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"),)
 
 def create_prompt(personality_profile, user_preferences, destination, start_date, end_date):
     prompt = f"""
