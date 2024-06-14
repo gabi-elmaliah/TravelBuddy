@@ -1,11 +1,12 @@
 from flask import Blueprint, render_template, request, flash, jsonify,redirect,url_for,send_from_directory,current_app
-from .models import User,  PersonalityProfile,UserPreferences
+from .models import User,  PersonalityProfile,UserPreferences,Trip
 from website import db, db_path
 from .auth import token_required
 from .clustering import update_user_clusters
 import logging
 from  .db_utils import get_user_data
 from .trip_planner import generate_trip,create_prompt
+from .utils import calculate_similarity
 
 routes=Blueprint('routes',__name__)
 
@@ -39,6 +40,81 @@ def make_trip(current_user):
         'message': 'Trip generated successfully',
         'trip': trip_details
     }), 200
+
+@routes.route('/top-users', methods=['POST'])
+@token_required
+def top_users(current_user):
+    print("top users api ")
+    data = request.get_json()
+    top_n = data.get('top_n')  # Default to top 5 users if not specified
+
+
+    # Fetch current user's profile and preferences
+    current_user_profile = PersonalityProfile.query.filter_by(user_id=current_user.id).first()
+    current_user_prefs = UserPreferences.query.filter_by(user_id=current_user.id).first()
+
+    # Fetch all users in the same cluster
+    cluster_users = User.query.filter_by(cluster=current_user.cluster).all()
+
+    similarities = []
+    
+    for user in cluster_users:
+        if user.id == current_user.id:
+            continue  # Skip the current user
+        
+        user_profile = PersonalityProfile.query.filter_by(user_id=user.id).first()
+        user_prefs = UserPreferences.query.filter_by(user_id=user.id).first()
+        
+        similarity = calculate_similarity(current_user_profile, user_profile, current_user_prefs, user_prefs)
+        similarities.append((user, similarity))
+
+    # Sort users by similarity
+    similarities.sort(key=lambda x: x[1])
+    
+    # Select the top N users
+    top_users = [user for user, _ in similarities[:top_n]]
+
+    # Prepare the response
+    response = []
+    for user in top_users:
+        response.append({
+            'user_name': user.user_name,
+            'email': user.email,
+            'trip_details': user.trip.details if user.trip else None  # Assuming a User has a trip relationship
+        })
+
+    return jsonify(response), 200
+
+@routes.route('/like-trip', methods=['POST'])
+@token_required
+def like_trip(current_user):
+    data = request.get_json()
+    trip_details = data.get('trip_details')
+    destination = data.get('destination')
+    start_date = data.get('start_date')
+    end_date = data.get('end_date')
+
+    if not trip_details or not destination or not start_date or not end_date:
+        return jsonify({'error': 'All trip details are required'}), 400
+
+    # Save the trip to the database
+    new_trip = Trip(
+        destination=destination,
+        start_date=start_date,
+        end_date=end_date,
+        details=trip_details
+    )
+
+    db.session.add(new_trip)
+    current_user.liked_trips.append(new_trip)
+    db.session.commit()
+
+    return jsonify({'message': 'Trip liked and saved successfully'}), 200
+
+
+
+    
+    
 
 
 

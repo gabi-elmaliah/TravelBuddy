@@ -21,14 +21,14 @@ def token_required(f):
         if 'x-access-token' in request.headers:
             token=request.headers['x-access-token']
         if not token:
-            return jsonify({"message":"Token is missing"})
+            return jsonify({"message":"Token is missing"}),401
         try:
             data=jwt.decode(token,current_app.config['SECRET_KEY'])
             print(data)
             current_user=User.query.filter_by(id=data['user_id']).first()
         except Exception as e :
             print(e)
-            return jsonify({'message':'Token is invalid '})
+            return jsonify({'message':'Token is invalid '}),403
         
         return f(current_user,*args,**kwargs)
     
