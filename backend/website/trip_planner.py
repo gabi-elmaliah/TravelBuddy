@@ -74,3 +74,5 @@ def generate_trip(prompt):
     trip_details= response.choices[0].message.content
     return trip_details
 
+
+

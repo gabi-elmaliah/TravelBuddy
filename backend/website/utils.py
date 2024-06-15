@@ -10,7 +10,13 @@ def get_project_root():
 
 def get_database_path():
     project_root = get_project_root()
-    return os.path.join(project_root, 'instance', 'database.db')
+    instance_dir = os.path.join(project_root, 'instance')
+    
+    # Ensure the instance directory exists
+    if not os.path.exists(instance_dir):
+        os.makedirs(instance_dir, exist_ok=True)
+    
+    return os.path.join(instance_dir, 'database.db')
 
 
 
