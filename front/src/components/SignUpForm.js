@@ -25,7 +25,7 @@ export default function SignUpForm() {
         // Save the token to localStorage
         localStorage.setItem('token', response.data.token);
         console.log("User created successfully");
-        navigate('/'); // Navigate to the home page on successful sign-up
+        navigate('/questionnaire'); // Navigate to the home page on successful sign-up
       } else {
         setError(response.data.error); // Set error message from response
       }

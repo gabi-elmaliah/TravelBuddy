@@ -131,8 +131,7 @@ def submit_questionnaire(current_user):
     
     for field in required_fields:
         if field not in data:
-            return jsonify({'error': f'Missing field: {field}'}), 400
-    print("before try")
+            return jsonify({'error': f'Missing field: {field}'}), 40
     try:
         age = data['age']
         budget = data['budget']

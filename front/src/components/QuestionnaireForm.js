@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { Link, useNavigate } from "react-router-dom";
 
 const QuestionnaireForm = () => {
   const [age, setAge] = useState('');
@@ -16,6 +17,7 @@ const QuestionnaireForm = () => {
     cuisine: false,
     cultural: false,
   });
+  const navigate = useNavigate();
 
   const handlePreferenceChange = (e) => {
     setPreferences({
@@ -39,7 +41,8 @@ const QuestionnaireForm = () => {
     };
 
     try {
-      const response = await axios.post('http://localhost:5000/submit-questionnaire', data, {
+      const response = await axios.post('http://localhost:5000/submit-questionnaire', data, 
+        {
         headers: {
           'Content-Type': 'application/json',
           'x-access-token': localStorage.getItem('token'), // Assuming token is stored in localStorage
@@ -48,6 +51,7 @@ const QuestionnaireForm = () => {
 
       if (response.status === 200) {
         console.log('Questionnaire submitted successfully');
+        navigate('/');
       }
     } catch (error) {
       console.error('There was an error submitting the questionnaire:', error);
@@ -67,9 +71,9 @@ const QuestionnaireForm = () => {
       <div>
         <label>Budget:</label>
         <select value={budget} onChange={(e) => setBudget(e.target.value)}>
-          <option value="low">Low</option>
-          <option value="medium">Medium</option>
-          <option value="high">High</option>
+          <option value="1">Low</option>
+          <option value="2">Medium</option>
+          <option value="3">High</option>
         </select>
       </div>
       <div>
