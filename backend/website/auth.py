@@ -57,6 +57,7 @@ def login():
         token=jwt.encode({'user_id':user.id,'exp':datetime.datetime.utcnow()+datetime.timedelta(hours=24)},current_app.config['SECRET_KEY'])
         return jsonify({'token':token.decode("UTF-8")})
     
+        
     return jsonify({'message': 'Wrong password'}), 401
     
     
@@ -79,7 +80,7 @@ def sign_up():
     db.session.commit()
     print(new_user)
     token=jwt.encode({'user_id':new_user.id,'exp':datetime.datetime.utcnow()+datetime.timedelta(hours=24)},current_app.config['SECRET_KEY'])
-    db.session.close()
+    # db.session.close()
     return jsonify({'token':token.decode("UTF-8")}),201
 
 

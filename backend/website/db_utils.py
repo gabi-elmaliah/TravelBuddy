@@ -7,5 +7,11 @@ def get_user_data(user_id):
     
     return user, personality_profile, user_preferences
 
+def get_users_in_same_cluster(cluster):
+    users = User.query.filter_by(cluster=cluster).all()
+    return users
+
+
+
 
 

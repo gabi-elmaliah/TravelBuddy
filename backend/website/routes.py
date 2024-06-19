@@ -41,27 +41,25 @@ def make_trip(current_user):
         'trip': trip_details
     }), 200
 
-@routes.route('/top-users', methods=['POST'])
+@routes.route('/top-users', methods=['GET'])
 @token_required
 def top_users(current_user):
-    print("top users api ")
-    data = request.get_json()
-    top_n = data.get('top_n')  # Default to top 5 users if not specified
 
+    top_n = request.args.get('top_n', default=5, type=int)
 
     # Fetch current user's profile and preferences
     current_user_profile = PersonalityProfile.query.filter_by(user_id=current_user.id).first()
     current_user_prefs = UserPreferences.query.filter_by(user_id=current_user.id).first()
 
+    if not current_user_profile or not current_user_prefs:
+        return jsonify({'error': 'You have to fill the questionnaire'}), 404
+
     # Fetch all users in the same cluster
-    cluster_users = User.query.filter_by(cluster=current_user.cluster).all()
+    cluster_users = User.query.filter(User.cluster == current_user.cluster, User.id != current_user.id).all()
 
     similarities = []
     
-    for user in cluster_users:
-        if user.id == current_user.id:
-            continue  # Skip the current user
-        
+    for user in cluster_users: 
         user_profile = PersonalityProfile.query.filter_by(user_id=user.id).first()
         user_prefs = UserPreferences.query.filter_by(user_id=user.id).first()
         
@@ -79,11 +77,11 @@ def top_users(current_user):
     for user in top_users:
         response.append({
             'user_name': user.user_name,
-            'email': user.email,
-            'trip_details': user.trip.details if user.trip else None  # Assuming a User has a trip relationship
+            'email': user.email
         })
 
     return jsonify(response), 200
+
 
 @routes.route('/like-trip', methods=['POST'])
 @token_required
@@ -124,22 +122,22 @@ def like_trip(current_user):
 @token_required
 def submit_questionnaire(current_user):
     data = request.get_json()
-    logging.debug("read from json")
     # Validate the data
     required_fields = ['age', 'budget', 'openness', 'conscientiousness', 'extraversion', 'agreeableness', 'neuroticism',
                        'activity_historical', 'activity_outdoor', 'activity_beach', 'activity_cuisine', 'activity_cultural']
     
     for field in required_fields:
         if field not in data:
-            return jsonify({'error': f'Missing field: {field}'}), 40
+            return jsonify({'error': f'Missing field: {field}'}), 400
+
     try:
-        age = data['age']
-        budget = data['budget']
-        openness = data['openness']
-        conscientiousness = data['conscientiousness']
-        extraversion = data['extraversion']
-        agreeableness = data['agreeableness']
-        neuroticism = data['neuroticism']
+        age = int(data['age'])
+        budget = int(data['budget'])
+        openness = int(data['openness'])
+        conscientiousness = int(data['conscientiousness'])
+        extraversion = int(data['extraversion'])
+        agreeableness = int(data['agreeableness'])
+        neuroticism = int(data['neuroticism'])
         activity_historical = data['activity_historical']
         activity_outdoor = data['activity_outdoor']
         activity_beach = data['activity_beach']
@@ -162,7 +160,6 @@ def submit_questionnaire(current_user):
         personality_profile.neuroticism = neuroticism
 
         # Create or update UserPreferences
-        print("prefences")
         preferences = UserPreferences.query.filter_by(user_id=current_user.id).first()
         if not preferences:
             preferences = UserPreferences(user_id=current_user.id)
