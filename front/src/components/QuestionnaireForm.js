@@ -37,7 +37,11 @@ const QuestionnaireForm = () => {
       extraversion,
       agreeableness,
       neuroticism,
-      ...preferences,
+      activity_historical: preferences.historical,
+      activity_outdoor: preferences.outdoor,
+      activity_beach:preferences.beach,
+      activity_cuisine: preferences.cuisine,
+      activity_cultural:preferences.cultural
     };
 
     try {
@@ -61,7 +65,7 @@ const QuestionnaireForm = () => {
   return (
     <form onSubmit={handleSubmit}>
       <div>
-        <label>Age:</label>
+        <label>What is your age:</label>
         <input
           type="number"
           value={age}
@@ -69,7 +73,7 @@ const QuestionnaireForm = () => {
         />
       </div>
       <div>
-        <label>Budget:</label>
+        <label>Rate your budget:</label>
         <select value={budget} onChange={(e) => setBudget(e.target.value)}>
           <option value="1">Low</option>
           <option value="2">Medium</option>
@@ -77,7 +81,7 @@ const QuestionnaireForm = () => {
         </select>
       </div>
       <div>
-        <label>Openness:</label>
+        <label>I enjoy trying new things and experiencing variety in life</label>
         <select value={openness} onChange={(e) => setOpenness(e.target.value)}>
           <option value="1">Strongly disagree</option>
           <option value="2">Disagree</option>
@@ -87,7 +91,7 @@ const QuestionnaireForm = () => {
         </select>
       </div>
       <div>
-        <label>Conscientiousness:</label>
+        <label>I like to plan things in advance and am well-organized</label>
         <select value={conscientiousness} onChange={(e) => setConscientiousness(e.target.value)}>
           <option value="1">Strongly disagree</option>
           <option value="2">Disagree</option>
@@ -97,7 +101,7 @@ const QuestionnaireForm = () => {
         </select>
       </div>
       <div>
-        <label>Extraversion:</label>
+        <label>EI feel energized when interacting with a lot of peoplextraversion</label>
         <select value={extraversion} onChange={(e) => setExtraversion(e.target.value)}>
           <option value="1">Strongly disagree</option>
           <option value="2">Disagree</option>
@@ -107,7 +111,7 @@ const QuestionnaireForm = () => {
         </select>
       </div>
       <div>
-        <label>Agreeableness:</label>
+        <label>I consider myself empathetic and cooperative with others</label>
         <select value={agreeableness} onChange={(e) => setAgreeableness(e.target.value)}>
           <option value="1">Strongly disagree</option>
           <option value="2">Disagree</option>
@@ -117,7 +121,7 @@ const QuestionnaireForm = () => {
         </select>
       </div>
       <div>
-        <label>Neuroticism:</label>
+        <label>I often feel anxious or easily get upset over small things</label>
         <select value={neuroticism} onChange={(e) => setNeuroticism(e.target.value)}>
           <option value="1">Strongly disagree</option>
           <option value="2">Disagree</option>

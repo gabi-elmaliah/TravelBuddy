@@ -33,6 +33,7 @@
     font-weight: 800;
     background: #fff;
     margin-bottom: 20px;
+    background-clip: text; 
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
