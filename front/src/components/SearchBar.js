@@ -21,9 +21,11 @@ const SearchBar=({setResults})=>
       );
       setResults(results);
     };
-    const handleChange = (value) => {
-      setInput(value);
-      fetchData(value);
+
+    // eslint-disable-next-line
+    const handleChange=(value)=>{
+        setInput(value)
+        fetchData(value)
     };
 
 
