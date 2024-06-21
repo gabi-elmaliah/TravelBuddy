@@ -1,6 +1,8 @@
+import React from 'react';
 import Footer from "../components/Footer";
 import Hero from "../components/Hero";
 import Navbar from "../components/Navbar";
+import CalendarGfg from '../components/Calendar';
 
 function Home() {
   return (
@@ -14,6 +16,9 @@ function Home() {
         url="/login"
         btnClass="show"
       />
+      <CalendarGfg title="Departure"/>
+      <CalendarGfg title="Return"/>
+    
       <Footer />
     </>
   );
