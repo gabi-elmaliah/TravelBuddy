@@ -25,7 +25,7 @@ const LoginForm = () => {
         // Save the token to localStorage
         localStorage.setItem('token', response.data.token);
         console.log(response.data.message);
-        navigate('/questionnaire');  // Navigate to a protected route on successful login
+        navigate('/');  // Navigate to a protected route on successful login
 
       } else {
         setError(response.data.message);  // Set error message from response

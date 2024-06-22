@@ -1,20 +1,30 @@
 import React, { useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
+import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
  
-export default function CalendarCfg(props) {
-    const [date, onChange] = useState(new Date());
+export default function CalendarCfg({setEndDate,setStartDate}) {
+    const [date, setDate] = useState(new Date());
     const [show, toggleShow] = useState(false);
+
+    const handleDateChange = (date) => {
+        setDate(date);
+        if (date.length === 2) { // Assuming a range is selected
+            setStartDate(date[0]);
+            setEndDate(date[1]);
+        }
+    };
 
     return (
         <div>
-            <button  onClick={() => toggleShow(!show)}>Show Calendar</button>
+            <button className="show-calendar-btn"  onClick={() => toggleShow(!show)}> <CalendarMonthOutlinedIcon /> Show Calendar</button>
             {show &&
             <div>
                 <Calendar
-                onChange={onChange}
+                onChange={handleDateChange}
                 value={date}
-                selectRange={true}              
+                selectRange={true}  
+                dateFormat="dd/mm/yy"            
                   />
             {date.length > 0 ? (
             <p className='text-center'>

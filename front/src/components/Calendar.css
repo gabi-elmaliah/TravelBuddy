@@ -154,3 +154,24 @@
 .react-calendar--selectRange .react-calendar__tile--hover {
   background-color: #e6e6e6;
 }
+
+.show-calendar-btn {
+  background-color: #4CAF50; /* Green background */
+  color: white; /* White text */
+  padding: 10px 60x 10px 60px; /* Padding around the text */
+  font-size: 16px; /* Text size */
+  border: none; /* No border */
+  border-radius: 5px; /* Rounded corners */
+  display: flex;
+  align-items: center; /* Align icon and text vertically */
+  justify-content: center; /* Center icon and text horizontally */
+  gap: 10px; /* Space between the icon and text */
+  transition: background-color 0.3s, box-shadow 0.3s; /* Smooth transitions for hover effects */
+  cursor: pointer; /* Pointer cursor on hover */
+  outline: none; /* Remove outline */
+}
+
+.show-calendar-btn:hover {
+  background-color: #45a049; /* Darker green background on hover */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Shadow for 3D effect */
+}

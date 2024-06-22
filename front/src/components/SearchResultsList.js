@@ -2,13 +2,13 @@ import "./SearchResultsList.css";
 import { SearchResult } from "./SearchResult";
 
 
-const SearchResultsList=({results})=>
+const SearchResultsList=(props)=>
     {
 
         return (
             <div className="results-list">
-              {results.map((result, id) => {
-                return <SearchResult result={result.name} key={id} />;
+              {props.results.map((result, id) => {
+                return <SearchResult result={result.name} key={id} setDestination={props.setDestination}/>;
               })}
             </div>
           );

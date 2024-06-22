@@ -4,11 +4,9 @@ import cities from "../cities.js"
 import "./SearchBar.css"
 
 
-const SearchBar=({setResults})=> 
+const SearchBar=({setResults,setInputValue,inputValue})=> 
   {
-    const [input,setInput]=useState("");
-
-
+  
     const fetchData = (value) => {
       if (!value) {
         setResults([]);
@@ -24,7 +22,7 @@ const SearchBar=({setResults})=>
 
     // eslint-disable-next-line
     const handleChange=(value)=>{
-        setInput(value)
+        setInputValue(value)
         fetchData(value)
     };
 
@@ -34,7 +32,7 @@ const SearchBar=({setResults})=>
         <FaSearch id="search-icon" />
         <input
           placeholder="Type to search..."
-          value={input}
+          value={inputValue}
           onChange={(e) => handleChange(e.target.value)}
         />
       </div>

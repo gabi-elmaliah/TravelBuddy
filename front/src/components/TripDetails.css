@@ -1,0 +1,16 @@
+.day {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.activity {
+    background-color: #f0f0f0;
+    margin-top: 5px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.PlanTrip .search-bar-container {
+    overflow: auto; /* Adds scrolling to the container if content overflows */
+}
