@@ -19,7 +19,10 @@ function PlanTrip(){
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
     const [destination,setDestination]=useState("");
-    const [tripDetails,setTripDetails]=useState(null)
+    const [tripDetails,setTripDetails]=useState(null);
+    const [isPending,setIsPending]=useState(false);
+    const [error,setError]=useState(null);
+
 
     useEffect(() => {
         console.log("StartDate has been set to:", startDate);
@@ -27,13 +30,10 @@ function PlanTrip(){
         // Any effect that needs to run when startDate or endDate changes
     }, [startDate, endDate]); 
     
-
-
-
-    
-
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsPending(true);
+        setError(null); 
         const tripData = {
           destination:destination,  
           start_date: startDate,
@@ -49,14 +49,25 @@ function PlanTrip(){
 
 
         try {
-            const response = await axios.post('http://localhost:5000/generate-trip', tripData,config);
+            const response = await axios.post('http://localhost:5000/generate-tripsss', tripData,config);
             console.log("Response data:", response.data.trip);
-            console.log(typeof(response.data.trip))
             setTripDetails(JSON.parse(response.data.trip))
-          } catch (error) {
-            console.log("Error fetching trip data:", error);
-          }
-       
+        } catch (error) {
+            // Detailed error handling
+            if (error.response) {
+                // The request was made and the server responded with a status code
+                // that falls outside the range of 2xx
+                setError(`Error ${error.response.status}: ${error.response.data.message}`);
+            } else if (error.request) {
+                // The request was made but no response was received
+                setError("Error: No response from the server.");
+            } else {
+                // Something happened in setting up the request that triggered an Error
+                setError("Error: " + error.message);
+            }
+        } finally {
+            setIsPending(false);  // Stop loading indicator regardless of the outcome
+        }
       };
 
     return(   
@@ -70,6 +81,9 @@ function PlanTrip(){
                 <form onSubmit={handleSubmit}  >
                     <button type="submit" className="create-trip-btn">Create Me a Trip</button>
                 </form>
+                {error &&  <div>{error}</div>}
+                {isPending &&  <div>Loading...</div>}
+                {error && <div className="error">{error}</div>}                
                 <TripDetails trip={tripDetails} /> 
             </div>
         </div>
