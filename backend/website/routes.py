@@ -3,12 +3,18 @@ from .models import User,  PersonalityProfile,UserPreferences,Trip
 from website import db, db_path
 from .auth import token_required
 from .clustering import update_user_clusters
-import logging
+
 from  .db_utils import get_user_data
 from .trip_planner import generate_trip,create_prompt
-from .utils import calculate_similarity
+from .utils import calculate_similarity,parse_iso_date
+import json
+from sqlalchemy.exc import SQLAlchemyError
+
+
 
 routes=Blueprint('routes',__name__)
+
+
 
 
          
@@ -87,27 +93,39 @@ def top_users(current_user):
 @token_required
 def like_trip(current_user):
     data = request.get_json()
-    trip_details = data.get('trip_details')
-    destination = data.get('destination')
-    start_date = data.get('start_date')
-    end_date = data.get('end_date')
+    try:
+    
+        trip_details = json.dumps(data['trip_details'])
+        # Parse the start and end dates from the input
+        start_date = parse_iso_date(data['start_date'])
+        end_date = parse_iso_date(data['end_date'])
+    
+        new_trip = Trip(
+            destination=data['destination'],
+            start_date=start_date,
+            end_date=end_date,
+            details=trip_details  # Store the JSON string
+        )
 
-    if not trip_details or not destination or not start_date or not end_date:
-        return jsonify({'error': 'All trip details are required'}), 400
+        db.session.add(new_trip)
+        current_user.liked_trips.append(new_trip)
+        db.session.commit()
 
-    # Save the trip to the database
-    new_trip = Trip(
-        destination=destination,
-        start_date=start_date,
-        end_date=end_date,
-        details=trip_details
-    )
 
-    db.session.add(new_trip)
-    current_user.liked_trips.append(new_trip)
-    db.session.commit()
+        return jsonify({'message': 'Trip liked and saved successfully'}), 200
 
-    return jsonify({'message': 'Trip liked and saved successfully'}), 200
+    except KeyError as e:
+        db.session.rollback()
+        return jsonify({'error': 'Missing necessary parameter: ' + str(e)}), 400
+    except SQLAlchemyError as e:
+        db.session.rollback()
+        return jsonify({'error': 'Database error: ' + str(e)}), 500
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': 'Error processing request: ' + str(e)}), 500
+
+
+    
 
 
 

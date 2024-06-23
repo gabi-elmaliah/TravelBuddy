@@ -4,7 +4,7 @@ import cities from "../cities.js"
 import "./SearchBar.css"
 
 
-const SearchBar=({setResults,setInputValue,inputValue})=> 
+const SearchBar=({setResults,setInputValue,inputValue,setShowResults})=> 
   {
   
     const fetchData = (value) => {
@@ -20,12 +20,11 @@ const SearchBar=({setResults,setInputValue,inputValue})=>
       setResults(results);
     };
 
-    // eslint-disable-next-line
-    const handleChange=(value)=>{
-        setInputValue(value)
-        fetchData(value)
-    };
-
+    const handleChange = (value) => {
+      setInputValue(value);
+      fetchData(value);
+      setShowResults(true);  // Show the results list when the input changes
+  };
 
     return (
       <div className="input-wrapper">

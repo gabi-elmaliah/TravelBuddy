@@ -7,7 +7,8 @@ import CalendarCfg from '../components/Calendar';
 import 'react-calendar/dist/Calendar.css';
 import Footer from '../components/Footer';
 import TripDetails from '../components/TripDetails';
-import AboutUs from '../components/AboutUs';
+import LikeButton from '../components/LikeButton';
+
 import axios from "axios";
 
 
@@ -22,6 +23,15 @@ function PlanTrip(){
     const [tripDetails,setTripDetails]=useState(null);
     const [isPending,setIsPending]=useState(false);
     const [error,setError]=useState(null);
+    const [showResults, setShowResults] = useState(true);
+
+    const currentUserToken = localStorage.getItem('token');
+
+
+    const handleSetDestination = (destination) => {
+        setDestination(destination);
+        setShowResults(false); // Hide the results list when a destination is selected
+    };
 
 
     useEffect(() => {
@@ -43,13 +53,13 @@ function PlanTrip(){
         const config={
             headers:{
                 'Content-Type': 'application/json',  // Specifies the content type of the request body
-                'x-access-token': localStorage.getItem('token')
+                'x-access-token': currentUserToken
             }
         }
 
 
         try {
-            const response = await axios.post('http://localhost:5000/generate-tripsss', tripData,config);
+            const response = await axios.post('http://localhost:5000/generate-trip', tripData,config);
             console.log("Response data:", response.data.trip);
             setTripDetails(JSON.parse(response.data.trip))
         } catch (error) {
@@ -75,8 +85,8 @@ function PlanTrip(){
         <Navbar />
         <div className="PlanTrip">
             <div className="search-bar-container">
-                <SearchBar setResults={setResults}  inputValue={destination} setInputValue={setDestination} />
-                <SearchResultsList results={results} setDestination={setDestination} />
+                <SearchBar setResults={setResults} inputValue={destination} setInputValue={setDestination} setShowResults={setShowResults} />
+                {showResults && <SearchResultsList results={results} setDestination={handleSetDestination} />}
                 <CalendarCfg  setStartDate={setStartDate} setEndDate={setEndDate} />
                 <form onSubmit={handleSubmit}  >
                     <button type="submit" className="create-trip-btn">Create Me a Trip</button>
@@ -84,7 +94,7 @@ function PlanTrip(){
                 {error &&  <div>{error}</div>}
                 {isPending &&  <div>Loading...</div>}
                 {error && <div className="error">{error}</div>}                
-                <TripDetails trip={tripDetails} /> 
+                <TripDetails trip={tripDetails} currentUserToken={currentUserToken} />                 
             </div>
         </div>
         <Footer/>

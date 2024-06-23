@@ -1,8 +1,9 @@
 import React from 'react';
 import "./TripDetails.css"
+import LikeButton from './LikeButton';
 
 
-export default function TripDetails({trip})
+export default function TripDetails({trip,currentUserToken})
 {
     if (!trip) return null;  // Render nothing if no trip data is available
 
@@ -23,6 +24,13 @@ export default function TripDetails({trip})
                     </div>
                 ))}
             </div>
+            <LikeButton tripDetails={{
+                    destination: trip.destination,
+                    start_date: trip.start_date,
+                    end_date: trip.end_date,
+                    trip_details: trip.trip_details
+                    }} userToken={currentUserToken} />
+            
         </div>
     );
 

@@ -1,5 +1,6 @@
 import os 
 import numpy as np
+from datetime import datetime
 
 
 
@@ -17,6 +18,9 @@ def get_database_path():
         os.makedirs(instance_dir, exist_ok=True)
     
     return os.path.join(instance_dir, 'database.db')
+
+def parse_iso_date(date_str):
+    return datetime.fromisoformat(date_str.replace('Z', '+00:00'))
 
 
 
