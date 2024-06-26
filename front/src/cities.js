@@ -12,7 +12,7 @@ const cities = [
     { id: 11, name: "Beijing", country: "China" },
     { id: 12, name: "Los Angeles", country: "USA" },
     { id: 13, name: "Cairo", country: "Egypt" },
-    { id: 14, name: "Madrid", country: "Spain" },
+    { id: 14, name: "Madrid", country: "Spain" },   
     { id: 15, name: "Bangkok", country: "Thailand" },
     { id: 16, name: "London", country: "Canada" },  // London, Ontario
     { id: 17, name: "Mexico City", country: "Mexico" },

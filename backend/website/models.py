@@ -46,6 +46,7 @@ class Trip(db.Model):
     details = db.Column(db.Text, nullable=False)
     
     
+    
 
 
 

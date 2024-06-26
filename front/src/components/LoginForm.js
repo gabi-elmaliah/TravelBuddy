@@ -3,6 +3,7 @@ import React,{ useState }  from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./LoginFormStyles.css";
+import Button from '@mui/material/Button'; 
 
 
 
@@ -31,8 +32,18 @@ const LoginForm = () => {
         setError(response.data.message);  // Set error message from response
       }
     } catch (error) {
-      console.error('There was an error!', error.response.data.message);
-      setError(error.response.data.message);  // Set error message from catch
+      // Check if the response exists in the error object
+      if (error.response) {
+        // Handle the case where the server responds with a status outside the 2xx range
+        setError("Login failed: " + error.response.data.message);
+      } else if (error.request) {
+        // Handle the case where the request was made but no response was received
+        setError("No response from the server. Please try again later.");
+      } else {
+        // Handle other errors like setting up the request that triggered an Error
+        setError("Error: " + error.message);
+      }
+      console.error('Error during form submission:', error);
     }
   };
 
@@ -41,7 +52,7 @@ const LoginForm = () => {
       <div className="illustration"></div>
       <div className="form">
         <div className="heading">LOGIN</div>
-        <form onSubmit={handleSubmit}>
+        <form  onSubmit={handleSubmit} >
           <div>
             <label htmlFor="e-mail"></label>
             <input
@@ -62,7 +73,7 @@ const LoginForm = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          <button type="submit">Submit</button>
+          <Button  type="submit" variant="contained" color="primary">Login</Button>
         </form>
         {error && <div className="error">{error}</div>} {/* Display error message */}
         <p>

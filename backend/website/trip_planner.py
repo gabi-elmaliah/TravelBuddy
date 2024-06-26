@@ -1,11 +1,15 @@
 from openai import OpenAI
 import os
 from dotenv import load_dotenv,find_dotenv
+import datetime
 
 _ = load_dotenv(find_dotenv())
 client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"),)
 
 def create_prompt(personality_profile, user_preferences, destination, start_date, end_date):
+
+   
+
     prompt = f"""
     Create a detailed trip itinerary in JSON format for a user with the following characteristics:
 
@@ -28,21 +32,24 @@ def create_prompt(personality_profile, user_preferences, destination, start_date
     Dates: From {start_date} to {end_date}
 
     Provide the response in the following JSON format:
+    
 
     {{
-        "destination": "{destination}",
-        "start_date": "{start_date}",
-        "end_date": "{end_date}",
-        "trip_details": [
+        "trip_details": 
+        [
             {{
-                "day": 1,
-                "date": "{start_date}",
+                // This is an example template. Please create similar entries for each day of the trip. 
+                "day": "Example Day", // from the first day till the last day
+                 "date": "Date Object", 
+            
+                 //Please provide a plan for each day that includes one or two activities:
                 "activities": [
                     {{
-                        "time": "09:00",
-                        "activity": "Visit Historical Museum",
+                        "time": "Example time ", // example time
+                        "activity": "Visit Historical Museum", // example activity
+                        //example description
                         "description": {{
-                            "overview": "Explore the rich history of the city at the Historical Museum.",
+                            "overview": "Explore the rich history of the city at the Historical Museum.",  
                             "historical_significance": "The museum houses artifacts dating back to the Roman era.",
                             "tips": "Arrive early to avoid crowds. Don't miss the ancient coin exhibit.",
                             "location_details": "Located in the city center, easily accessible by public transport."
@@ -54,6 +61,7 @@ def create_prompt(personality_profile, user_preferences, destination, start_date
             ...
         ]
     }}
+    
     """
     return prompt
 

@@ -10,6 +10,22 @@
     width: 50%;
     margin: auto;
   }
+
+  .signIn button[type="submit"] {
+    display: block; /* Keeps the button as a block element */
+    width: 50%; /* Controls the width of the button */
+    margin: 20px auto; /* Centers the button horizontally and adds vertical space */
+    padding: 10px 0; /* Adds padding inside the button */
+    background-color: white; /* Default background color */
+    color: black; /* Default text color */
+    transition: background-color 0.3s, color 0.3s; /* Smooth transition for color and background */
+    border: none; /* Optional: removes the border */
+}
+
+.signIn button[type="submit"]:hover {
+  background-color: rgb(114, 114, 226); /* Background color on hover */
+}
+
   
   .signIn input[type="email"],
   .signIn input[type="text"] {
@@ -20,9 +36,6 @@
     border: 1px solid #2a2a2a;
   }
   
-  .signIn button[type="submit"] {
-    display: inline;
-  }
   
   @media screen and (max-width: 850px) {
     .signIn {

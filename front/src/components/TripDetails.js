@@ -3,17 +3,17 @@ import "./TripDetails.css"
 import LikeButton from './LikeButton';
 
 
-export default function TripDetails({trip,currentUserToken})
+export default function TripDetails({trip,currentUserToken,destination,startDate,endDate})
 {
     if (!trip) return null;  // Render nothing if no trip data is available
 
     return (
         <div>
-            <h1>Trip to: {trip.destination}</h1>
+            <h1>Trip to: {destination}</h1>
             <div>
                 {trip.trip_details.map((day, index) => (
                     <div key={index} className="day">
-                        <h3>Day {day.day}</h3>
+                        <h3>{day.day}</h3>
                         {day.activities.map((activity, idx) => (
                             <div key={idx} className="activity">
                                 <p>Time: {activity.time}</p>
@@ -25,9 +25,9 @@ export default function TripDetails({trip,currentUserToken})
                 ))}
             </div>
             <LikeButton tripDetails={{
-                    destination: trip.destination,
-                    start_date: trip.start_date,
-                    end_date: trip.end_date,
+                    destination: destination,
+                    start_date: startDate,
+                    end_date: endDate,
                     trip_details: trip.trip_details
                     }} userToken={currentUserToken} />
             

@@ -94,14 +94,22 @@ def top_users(current_user):
 def like_trip(current_user):
     data = request.get_json()
     try:
-    
+        if not data:
+            return jsonify({'error': 'No data provided'}), 400
+        
+        
         trip_details = json.dumps(data['trip_details'])
         # Parse the start and end dates from the input
         start_date = parse_iso_date(data['start_date'])
         end_date = parse_iso_date(data['end_date'])
+        destination=data['destination']
+
+        if not all([trip_details, destination, start_date, end_date]):
+            return jsonify({'error': 'Missing required trip details'}), 400
+        
     
         new_trip = Trip(
-            destination=data['destination'],
+            destination=destination,
             start_date=start_date,
             end_date=end_date,
             details=trip_details  # Store the JSON string

@@ -94,7 +94,10 @@ function PlanTrip(){
                 {error &&  <div>{error}</div>}
                 {isPending &&  <div>Loading...</div>}
                 {error && <div className="error">{error}</div>}                
-                <TripDetails trip={tripDetails} currentUserToken={currentUserToken} />                 
+                <TripDetails trip={tripDetails} 
+                    destination={destination} 
+                    currentUserToken={currentUserToken} 
+                    startDate={startDate} endDate={endDate} />                 
             </div>
         </div>
         <Footer/>

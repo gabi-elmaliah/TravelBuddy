@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
+import TextField from '@mui/material/TextField';
 
 const QuestionnaireForm = () => {
   const [age, setAge] = useState('');
@@ -68,9 +69,13 @@ const QuestionnaireForm = () => {
       <div>
         <label>What is your age:</label>
         <input
+          label="What is your age"
           type="number"
           value={age}
           onChange={(e) => setAge(e.target.value)}
+          variant="outlined"
+          fullWidth
+          margin="normal"
         />
       </div>
       <div>
