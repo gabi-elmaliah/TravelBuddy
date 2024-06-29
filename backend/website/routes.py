@@ -5,7 +5,7 @@ from .auth import token_required
 from .clustering import update_user_clusters
 
 from  .db_utils import get_user_data
-from .trip_planner import generate_trip,create_prompt
+#from .trip_planner import generate_trip,create_prompt
 from .utils import calculate_similarity,parse_iso_date
 import json
 from sqlalchemy.exc import SQLAlchemyError
@@ -16,7 +16,7 @@ routes=Blueprint('routes',__name__)
 
 
 
-
+""" 
          
 @routes.route('/generate-trip', methods=['POST'])
 @token_required
@@ -37,7 +37,16 @@ def make_trip(current_user):
     print(type(prompt))
     # Generate trip details using OpenAI API
     try:
-        trip_details =generate_trip(prompt)
+    #    trip_details =generate_trip(prompt)
+        new_trip = Trip(
+            destination=destination,
+            start_date=start_date,
+            end_date=end_date,
+            details=trip_details  # Store the JSON string
+        )
+        db.session.add(new_trip)
+        db.session.commit()
+        
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -46,6 +55,8 @@ def make_trip(current_user):
         'message': 'Trip generated successfully',
         'trip': trip_details
     }), 200
+
+"""
 
 @routes.route('/top-users', methods=['GET'])
 @token_required

@@ -2,6 +2,40 @@ import sqlite3
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans
+from datetime import datetime
+
+def convert_ordinal_to_date(ordinal_series):
+    reference_date = datetime.strptime('2000-01-01', '%Y-%m-%d')  # Using January 1, 2000 as reference
+    return ordinal_series.apply(lambda x: (reference_date + pd.Timedelta(days=x)).strftime('%Y-%m-%d'))
+
+def convert_date_to_ordinal(date_series):
+    reference_date = datetime.strptime('2000-01-01', '%Y-%m-%d')  # Using January 1, 2000 as reference
+    date_series.head(30)
+    return date_series.apply(lambda x: (datetime.strptime(x, '%Y-%m-%d') - reference_date).days)
+
+def calculate_cluster_means(original_data, clustered_data):
+    original_data['cluster'] = clustered_data['cluster']
+    
+    # Specify the attributes used in clustering
+    attributes = ['age', 'openness', 'conscientiousness', 'extraversion', 'agreeableness', 'neuroticism',
+                  'budget', 'activity_historical', 'activity_outdoor', 'activity_beach', 'activity_cuisine', 'activity_cultural',
+                  'intended_start_date', 'intended_end_date']
+
+    # Ensure dates are converted to ordinal form
+    original_data['intended_start_date'] = convert_date_to_ordinal(original_data['intended_start_date'])
+    original_data['intended_end_date'] = convert_date_to_ordinal(original_data['intended_end_date'])
+    
+    # Calculate means for specified attributes
+    cluster_means = original_data.groupby('cluster')[attributes].mean()
+    cluster_means = cluster_means.round()
+
+    # Convert the ordinal dates back to the original date format
+    cluster_means['intended_start_date'] = convert_ordinal_to_date(cluster_means['intended_start_date'])
+    cluster_means['intended_end_date'] = convert_ordinal_to_date(cluster_means['intended_end_date'])
+    
+    return cluster_means
+
+
 
 def fetch_user_data(db_path):
     # Connect to the SQLite database SSS
@@ -21,7 +55,10 @@ def fetch_user_data(db_path):
         up.activity_outdoor, 
         up.activity_beach, 
         up.activity_cuisine, 
-        up.activity_cultural
+        up.activity_cultural,
+        up.intended_destination,
+        up.intended_start_date,
+        up.intended_end_date
     FROM 
         user u
     JOIN 
@@ -33,11 +70,20 @@ def fetch_user_data(db_path):
     # Read data into a DataFrame
     data_df = pd.read_sql(query, conn)
     conn.close()
+    print("Fetched data:")
+    print(data_df.head())
     return data_df
 
 def preprocess_data(data_df):
+    # Convert dates to ordinal based on a reference date
+    data_df.isna().sum()
+    data_df['intended_start_date'] = convert_date_to_ordinal(data_df['intended_start_date'])
+    data_df['intended_end_date'] = convert_date_to_ordinal(data_df['intended_end_date'])
+
+
     features_to_scale = ['age', 'openness', 'conscientiousness', 'extraversion', 'agreeableness', 'neuroticism',
-                         'budget', 'activity_historical', 'activity_outdoor', 'activity_beach', 'activity_cuisine', 'activity_cultural']
+                         'budget', 'activity_historical', 'activity_outdoor', 'activity_beach', 'activity_cuisine', 'activity_cultural',
+                         'intended_start_date', 'intended_end_date']
 
     scaler = StandardScaler()
     scaled_features = scaler.fit_transform(data_df[features_to_scale])
@@ -47,51 +93,84 @@ def preprocess_data(data_df):
     
     return data_df
 
-def cluster_and_update_db(db_path, data_df, n_clusters=5):
-    features_to_scale = ['age', 'openness', 'conscientiousness', 'extraversion', 'agreeableness', 'neuroticism',
-                         'budget', 'activity_historical', 'activity_outdoor', 'activity_beach', 'activity_cuisine', 'activity_cultural']
+def determine_n_clusters(group_size):
+    if group_size < 10:
+        return 2
+    elif group_size < 20:
+        return 3
+    elif group_size < 50:
+        return 4
+    else:
+        return 5
+def assign_groups(data_df):
+    data_df['group'] = data_df.groupby(['cluster']).cumcount() // 7 + 1
+    return data_df
 
-    kmeans = KMeans(n_clusters=n_clusters, random_state=0)
-    kmeans.fit(data_df[features_to_scale])
-    data_df['cluster'] = kmeans.labels_
+def cluster_users_by_destination(data_df):
+    results = []
+    cluster_offset = 0  # Initialize cluster offset
 
+    for destination, group in data_df.groupby('intended_destination'):
+        
+        features_to_scale = ['age', 'openness', 'conscientiousness', 'extraversion', 'agreeableness', 'neuroticism',
+                             'budget', 'activity_historical', 'activity_outdoor', 'activity_beach', 'activity_cuisine', 'activity_cultural',
+                             'intended_start_date', 'intended_end_date']
+        
+        n_clusters = determine_n_clusters(len(group))
+        kmeans = KMeans(n_clusters=n_clusters, random_state=0)
+        kmeans.fit(group[features_to_scale])
+        group['cluster'] = kmeans.labels_ + cluster_offset  # Adjust cluster labels to be unique
+        
+        results.append(group)
+        
+        cluster_offset += n_clusters  # Update cluster offset for next destination
+
+    return pd.concat(results)
+
+def assign_groups(data_df):
+    data_df['group'] = data_df.groupby(['cluster']).cumcount() // 7 + 1
+    return data_df
+
+
+
+def update_user_clusters_and_groups(db_path, data_df):
     conn = sqlite3.connect(db_path)
-    cursor = conn.cursor() 
+    cursor = conn.cursor()
     
     for index, row in data_df.iterrows():
-        print(row['user_id'])
         user_id = row['user_id']
         cluster_label = row['cluster']
-        conn.execute('UPDATE user SET cluster = ? WHERE id = ?', (cluster_label, user_id))
-    conn.commit() # Create a cursor object to interact with the database
-    
-    # Fetch and print data from the user table
-    print("User Table:")
-    cursor.execute("SELECT * FROM user")  # Execute an SQL command to fetch all rows from the user table
-    rows = cursor.fetchall()  # Fetch all rows from the executed query
-    for row in rows:
-        print(row)  # Print each row
-    
-    # Close the database connection
-    conn.close()  # Close the connection to the database
-
-    return data_df[['user_id', 'cluster']]
+        group_number = row['group']
+        cursor.execute('UPDATE user SET cluster = ?, `group` = ? WHERE id = ?', (cluster_label, group_number, user_id))
+    conn.commit()
+    conn.close()
 
 
 
+# Main function to perform the entire clustering process
 def update_user_clusters(db_path):
-    # Fetch data from the database
     data_df = fetch_user_data(db_path)
     print("Fetched data:")
-    print(data_df.tail(5))  # Display the first few rows of the DataFrame
+    data_df.tail(5)
     
-    # Preprocess the data
-    data_df = preprocess_data(data_df)
+    original_data = data_df.copy()  # Preserve original data for mean calculation
+    print("original Data")
+    original_data.head()
+    
+    preprocessed_data = preprocess_data(data_df.copy())
     print("Preprocessed data:")
-    print(data_df.tail(5))  # Display the first few rows of the preprocessed DataFrame
+    preprocessed_data.head(5)
     
-    # Apply K-means clustering and update the database
-    clustered_data = cluster_and_update_db(db_path, data_df)
-    print("Clustered data:")
-    print(clustered_data.tail(5))  # Display the updated DataFrame with clusters
+    clustered_data = cluster_users_by_destination(preprocessed_data)
+    grouped_data = assign_groups(clustered_data)
     
+    update_user_clusters_and_groups(db_path, grouped_data)
+    
+    print("Clustered and grouped data:")
+    grouped_data.head(5)
+    
+    cluster_means = calculate_cluster_means(original_data, grouped_data)
+    print("Cluster means:")
+    print(cluster_means)
+
+    return cluster_means, original_data

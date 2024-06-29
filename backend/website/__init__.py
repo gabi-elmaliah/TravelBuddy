@@ -5,6 +5,7 @@ from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
 from .utils import get_database_path 
 from flask_cors import CORS
+from flask_migrate import Migrate
 
 
 db_path =get_database_path()
@@ -19,8 +20,8 @@ def create_app():
     CORS(app)
     app.config['SECRET_KEY'] = 'hjshjhdjah kjshkjdhjs'
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
-
     db.init_app(app)
+
 
     from .routes import routes
     from .auth import auth

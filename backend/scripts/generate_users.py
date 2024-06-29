@@ -7,6 +7,7 @@ from werkzeug.security import generate_password_hash
 from flask_sqlalchemy import SQLAlchemy
 from faker import Faker
 import random
+from datetime import timedelta, datetime
 
 app = create_app() 
 fake = Faker()
@@ -39,6 +40,12 @@ def create_fake_data():
             )
             db.session.add(new_profile)
 
+            # Create user preferences, including destination and dates
+            start_date = fake.date_between(start_date='today', end_date='+2y')
+            end_date = start_date + timedelta(days=random.randint(1, 14))  # Trip duration between 1 and 14 days
+            destinations = ['New York','London', 'Tokyo','Paris', 'Berlin', 'Sydney','São Paulo',"Mumbai","Cape Town","Beijing","Los Angeles",
+                            "Cairo","Madrid","Bangkok","Mexico City","Lagos","Shanghai","Karachi"]  # Example destinations
+
             # Create user preferences
             new_preferences = UserPreferences(
                 user=new_user,
@@ -46,7 +53,10 @@ def create_fake_data():
                 activity_outdoor=fake.boolean(),
                 activity_beach=fake.boolean(),
                 activity_cuisine=fake.boolean(),
-                activity_cultural=fake.boolean()
+                activity_cultural=fake.boolean(),
+                intended_destination=random.choice(destinations),
+                intended_start_date=start_date,
+                intended_end_date=end_date
             )
             db.session.add(new_preferences)
         # Commit all changes to the database
