@@ -2,7 +2,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
-import TextField from '@mui/material/TextField';
+import './QuestionnaireForm.css';
+import { Unstable_NumberInput as NumberInput } from '@mui/base/Unstable_NumberInput';
 
 const QuestionnaireForm = () => {
   const [age, setAge] = useState('');
@@ -65,18 +66,23 @@ const QuestionnaireForm = () => {
   };
 
   return (
+    
+
+
+    
     <form onSubmit={handleSubmit}>
-      <div>
+    <div>
+       
         <label>What is your age:</label>
-        <input
-          label="What is your age"
-          type="number"
+        <NumberInput
+          min={18}
+          max={60}
+          aria-label="Demo number input"
+          placeholder="Type a number…"
           value={age}
-          onChange={(e) => setAge(e.target.value)}
-          variant="outlined"
-          fullWidth
-          margin="normal"
-        />
+          onChange={(event, val) => setAge(val)}
+          className="age-input"
+          />
       </div>
       <div>
         <label>Rate your budget:</label>
@@ -185,7 +191,9 @@ const QuestionnaireForm = () => {
         </div>
       </div>
       <button type="submit">Submit</button>
+
     </form>
+
   );
 };
 

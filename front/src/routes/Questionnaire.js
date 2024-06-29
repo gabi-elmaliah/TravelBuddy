@@ -7,6 +7,7 @@ import QuestionnaireForm from "../components/QuestionnaireForm";
 function Questionnaire() {
   return (
     <>
+  
       <Navbar />
       <Hero
         cName="hero-mid"
@@ -14,7 +15,9 @@ function Questionnaire() {
         title="Questionnaire"
         btnClass="hide"
       />
+      <div>
       <QuestionnaireForm/>
+      </div>
       <Footer />
     </>
   );
