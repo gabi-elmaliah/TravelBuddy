@@ -1,0 +1,78 @@
+.form-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-element {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.form-element label {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.age-input {
+  width: 100px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  text-align: center;
+}
+
+select, input[type="checkbox"] {
+  margin-top: 5px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  grid-column: span 2;
+  padding: 10px 20px;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.form-container > div {
+  grid-column: span 2;
+  display: flex;
+  justify-content: center;
+}
+
+.calendar-container, .search-bar-container {
+  grid-column: span 2;
+  display: flex;
+  justify-content: center;
+}
+
+.preferences-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.preference-item {
+  display: flex;
+  align-items: center;
+}
+
+.preference-item input[type="checkbox"] {
+  margin-right: 10px;
+}
