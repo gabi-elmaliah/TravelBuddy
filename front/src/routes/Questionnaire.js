@@ -2,9 +2,16 @@ import React from 'react';
 import Hero from "../components/Hero";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import CalendarCfg from '../components/Calendar';
 import QuestionnaireForm from "../components/QuestionnaireForm";
 
 function Questionnaire() {
+  const [results, setResults] = useState([]);
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+  const [destination,setDestination]=useState("");
+
+
   return (
     <>
   

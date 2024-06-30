@@ -2,20 +2,57 @@ import React, { useEffect, useState } from 'react';
 import './DailyTripDetails.css'
 import axios from 'axios';
 
-export default function DailyTripDetails({setEndDate,setStartDate}) {
-    const [tripDetails, setTripDetails] = useState(null);
+export default function DailyTripDetails() {
+    const [tripDetails, setTripDetails] = useState([]);
     const [groupMembers, setGroupMembers] = useState([]);
     const [error, setError] = useState(null);
+    const [destination,setDestination]=useState("")
+    const [startDate, setStartDate] = useState(new Date());
+    const [endDate, setEndDate] = useState(new Date());
+    const [loading, setLoading] = useState(true);
+
 
 
     useEffect(() => {
+
+        console.log('useEffect running'); // Add this log to ensure useEffect is running
         // Fetch the trip details from your backend API using axios
         async function fetchTripDetails() {
           try {
-            const response = await axios.get('http://localhost:5000/daily_trip'); 
+
+            console.log('Fetching trip details...'); // Add this log to ensure fetchTripDetails is called
+
+            const response = await axios.get('http://localhost:5000/daily-trip',{
+
+              headers: {
+                'x-access-token': localStorage.getItem('token'), // Assuming token is stored in localStorage
+              },
+
+            }); 
+
+            console.log('Response received:', response); // Log the response
+
+
             const data = response.data;
-            setTripDetails(JSON.parse(response.data.trip.details));
-            setGroupMembers(data.group_members);
+            console.log('Response data:', data); // Log the response data
+
+            if (data.trip) {
+              console.log('Un Parsed trip details:',data.trip.details); 
+              const parsedDetails = JSON.parse(data.trip.details);
+              const parsedTripDetails=JSON.parse(parsedDetails);
+
+              console.log('Parsed trip details:', parsedTripDetails); // Log the parsed trip details
+
+              setTripDetails(parsedTripDetails.trip_details);
+              setStartDate(new Date(data.trip.start_date).toLocaleDateString());
+              setEndDate(new Date(data.trip.end_date).toLocaleDateString());
+              setDestination(data.trip.destination)
+              setGroupMembers(data.group_members);
+              console.log("Trip Details:",tripDetails )
+
+          } else {
+              setTripDetails(null);
+          }
           } catch (error) {
              // Detailed error handling
             if (error.response) {
@@ -30,17 +67,33 @@ export default function DailyTripDetails({setEndDate,setStartDate}) {
             setError("Error: " + error.message);
           }
           }
+          finally{
+            setLoading(false);
+          }
         }
         fetchTripDetails();
       }, []);
+
+
+    if (loading) {
+      return <div>Loading...</div>;
+  }
     
-      if (!tripDetails) {
-        return <div>Loading...</div>;
-      }
+      
+    if (!tripDetails) {
+      return <div className="no-trip-message">You don't have a trip assigned yet. You will have a trip after tomorrow.</div>;
+  }
+
+
+      if (error) {
+        return <div className="error-message">{error}</div>;
+    }
+
 
       return (
         <div className="trip-details">
           <h2>Trip Details</h2>
+          <p><strong>Destination:</strong> {destination}</p>
           <p><strong>Start Date:</strong> {new Date(startDate).toLocaleDateString()}</p>
           <p><strong>End Date:</strong> {new Date(endDate).toLocaleDateString()}</p>
           <div className="trip-info">

@@ -18,7 +18,8 @@ function Home() {
         url="/login"
         btnClass="show"
       />
-      <DailyTripDetails/>
+      
+      <DailyTripDetails />
 
 
       

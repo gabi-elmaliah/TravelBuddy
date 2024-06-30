@@ -63,3 +63,7 @@
     font-size: 18px;
     color: #666;
   }
+  .no-trip-message {
+    color: blue;
+    font-weight: bold;
+}
