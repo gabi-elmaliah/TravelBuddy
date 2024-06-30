@@ -3,7 +3,7 @@ from .models import User,  PersonalityProfile,UserPreferences,Trip,DailyTrip
 from website import db, db_path
 from .auth import token_required
 from .clustering import update_user_clusters
-
+from datetime import datetime
 from  .db_utils import get_user_data
 #from .trip_planner import generate_trip,create_prompt
 from .utils import calculate_similarity,parse_iso_date
@@ -182,6 +182,7 @@ def get_daily_trip(current_user):
 @token_required
 def submit_questionnaire(current_user):
     data = request.get_json()
+    print(data)
     # Validate the data
     required_fields = ['age', 'budget', 'openness', 'conscientiousness', 'extraversion', 'agreeableness', 'neuroticism',
                        'activity_historical', 'activity_outdoor', 'activity_beach', 'activity_cuisine', 'activity_cultural','destination',
@@ -204,9 +205,14 @@ def submit_questionnaire(current_user):
         activity_beach = data['activity_beach']
         activity_cuisine = data['activity_cuisine']
         activity_cultural = data['activity_cultural']
-        destination=data['detination']
-        start_date=data['start_date']
-        end_date=data['end_date']
+        destination=data['destination']
+        start_date_str=data['start_date']
+        end_date_str=data['end_date']
+
+
+        # Convert date strings to date objects (strip the time part)
+        start_date = datetime.strptime(start_date_str.split('T')[0], '%Y-%m-%d').date()
+        end_date = datetime.strptime(end_date_str.split('T')[0], '%Y-%m-%d').date()
 
         # Create or update PersonalityProfile
         print("personality profile")
@@ -244,7 +250,7 @@ def submit_questionnaire(current_user):
         return jsonify({'message': 'Questionnaire submitted successfully'}), 200
 
     except Exception as e:
-        print(e)
+        print("Error occurred:", str(e))  # Log error
         db.session.rollback()
         return jsonify({'error': str(e)}), 500
 

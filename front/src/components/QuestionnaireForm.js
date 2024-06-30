@@ -50,6 +50,8 @@ const QuestionnaireForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // Clear previous errors
+    setError('');
      // Validate required fields
      if (!age || !destination) {
       setError('Age and destination are required fields.');
@@ -280,8 +282,7 @@ const QuestionnaireForm = () => {
 
 
 
-    
-    </>
+</>
 
     
     
