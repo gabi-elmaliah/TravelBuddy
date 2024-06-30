@@ -1,0 +1,65 @@
+.trip-details {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .trip-details h2 {
+    text-align: center;
+    color: #333;
+  }
+  
+  .trip-details p {
+    font-size: 16px;
+    color: #666;
+  }
+  
+  .trip-info {
+    margin-top: 20px;
+  }
+  
+  .trip-day {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .trip-day h3 {
+    margin-bottom: 10px;
+    color: #2c3e50;
+  }
+  
+  .activities h4 {
+    margin-bottom: 10px;
+    color: #2980b9;
+  }
+  
+  .activity p {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #444;
+  }
+  
+  .group-members {
+    margin-top: 20px;
+  }
+  
+  .group-members h3 {
+    color: #2c3e50;
+  }
+  
+  .error-message {
+    color: red;
+    text-align: center;
+  }
+  
+  .loading-message {
+    text-align: center;
+    font-size: 18px;
+    color: #666;
+  }

@@ -15,9 +15,11 @@ function Questionnaire() {
         title="Questionnaire"
         btnClass="hide"
       />
-      <div>
-      <QuestionnaireForm/>
-      </div>
+
+      <QuestionnaireForm />
+    
+
+      
       <Footer />
     </>
   );

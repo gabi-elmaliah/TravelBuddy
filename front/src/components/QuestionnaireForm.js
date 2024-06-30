@@ -6,6 +6,7 @@ import './QuestionnaireForm.css'; // Import the CSS module
 import CalendarCfg from './Calendar';
 import 'react-calendar/dist/Calendar.css';
 import SearchBar from "./SearchBar";
+import cities from "../cities"
 import SearchResultsList from './SearchResultsList';
 
 
@@ -30,6 +31,7 @@ const QuestionnaireForm = () => {
   const [results, setResults] = useState([]);
   const [showResults, setShowResults] = useState(false);
   const [destination, setDestination] = useState('');
+  const [error, setError] = useState('');
 
 
   const handleSetDestination = (destination) => {
@@ -48,6 +50,30 @@ const QuestionnaireForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+     // Validate required fields
+     if (!age || !destination) {
+      setError('Age and destination are required fields.');
+      return;
+    }
+
+     // Validate age range
+     if (age < 20 || age > 60) {
+      setError('Age must be between 20 and 60.');
+      return;
+    }
+
+     // Validate destination
+     const validDestinations = cities.map(city => city.name);
+     if (!validDestinations.includes(destination)) {
+       setError('Please select a valid destination from the list.');
+       return;
+     }
+
+     // Validate start date and end date
+    if (!startDate || !endDate) {
+      setError('Please select both start date and end date.');
+      return;
+    }
 
     const data = {
       age,
@@ -61,7 +87,10 @@ const QuestionnaireForm = () => {
       activity_outdoor: preferences.outdoor,
       activity_beach:preferences.beach,
       activity_cuisine: preferences.cuisine,
-      activity_cultural:preferences.cultural
+      activity_cultural:preferences.cultural,
+      destination:destination,  
+      start_date: startDate,
+      end_date: endDate
     };
 
     try {
@@ -78,7 +107,18 @@ const QuestionnaireForm = () => {
         navigate('/');
       }
     } catch (error) {
-      console.error('There was an error submitting the questionnaire:', error);
+       // Detailed error handling
+       if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls outside the range of 2xx
+        setError(`Error ${error.response.status}: ${error.response.data.message}`);
+      } else if (error.request) {
+        // The request was made but no response was received
+        setError("Error: No response from the server.");
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        setError("Error: " + error.message);
+      }
     }
   };
 
@@ -86,7 +126,7 @@ const QuestionnaireForm = () => {
 
     <>
 
-<div className="form-element search-bar-container">
+<div className="questionnaire-form-element search-bar-container">
         <label>Destination:</label>
         <SearchBar 
           setResults={setResults}
@@ -97,15 +137,15 @@ const QuestionnaireForm = () => {
         {showResults && <SearchResultsList results={results} setDestination={handleSetDestination} />}
         <label>Select the Dates of the trip</label>
         <CalendarCfg setStartDate={setStartDate} setEndDate={setEndDate} />
-      </div>
+  </div>
 
 
 
 
 
-<form onSubmit={handleSubmit} className="form-container">
+  <form onSubmit={handleSubmit} className="questionnaire-form-container">
 
-<div className="form-element">
+<div className="questionnaire-form-element">
   <label>What is your age:</label>
   <input 
     type="number" 
@@ -113,24 +153,23 @@ const QuestionnaireForm = () => {
     max={60} 
     value={age} 
     onChange={(e) => setAge(e.target.value)} 
-    className="age-input" 
+    className="questionnaire-age-input" 
     placeholder="Type your age…" 
   />
 </div>
 
-<div className="form-element">
+<div className="questionnaire-form-element">
   <label>Rate your budget:</label>
-  <select value={budget} onChange={(e) => setBudget(e.target.value)}>
+  <select value={budget} onChange={(e) => setBudget(e.target.value)} className="questionnaire-select-input">
     <option value="1">Low</option>
     <option value="2">Medium</option>
     <option value="3">High</option>
   </select>
 </div>
 
-
-<div className="form-element">
+<div className="questionnaire-form-element">
   <label>I enjoy trying new things and experiencing variety in life</label>
-  <select value={openness} onChange={(e) => setOpenness(e.target.value)}>
+  <select value={openness} onChange={(e) => setOpenness(e.target.value)} className="questionnaire-select-input">
     <option value="1">Strongly disagree</option>
     <option value="2">Disagree</option>
     <option value="3">Neutral</option>
@@ -139,9 +178,9 @@ const QuestionnaireForm = () => {
   </select>
 </div>
 
-<div className="form-element">
+<div className="questionnaire-form-element">
   <label>I like to plan things in advance and am well-organized</label>
-  <select value={conscientiousness} onChange={(e) => setConscientiousness(e.target.value)}>
+  <select value={conscientiousness} onChange={(e) => setConscientiousness(e.target.value)} className="questionnaire-select-input">
     <option value="1">Strongly disagree</option>
     <option value="2">Disagree</option>
     <option value="3">Neutral</option>
@@ -150,9 +189,9 @@ const QuestionnaireForm = () => {
   </select>
 </div>
 
-<div className="form-element">
+<div className="questionnaire-form-element">
   <label>I feel energized when interacting with a lot of people</label>
-  <select value={extraversion} onChange={(e) => setExtraversion(e.target.value)}>
+  <select value={extraversion} onChange={(e) => setExtraversion(e.target.value)} className="questionnaire-select-input">
     <option value="1">Strongly disagree</option>
     <option value="2">Disagree</option>
     <option value="3">Neutral</option>
@@ -161,9 +200,9 @@ const QuestionnaireForm = () => {
   </select>
 </div>
 
-<div className="form-element">
+<div className="questionnaire-form-element">
   <label>I consider myself empathetic and cooperative with others</label>
-  <select value={agreeableness} onChange={(e) => setAgreeableness(e.target.value)}>
+  <select value={agreeableness} onChange={(e) => setAgreeableness(e.target.value)} className="questionnaire-select-input">
     <option value="1">Strongly disagree</option>
     <option value="2">Disagree</option>
     <option value="3">Neutral</option>
@@ -172,10 +211,9 @@ const QuestionnaireForm = () => {
   </select>
 </div>
 
-
-<div className="form-element">
+<div className="questionnaire-form-element">
   <label>I often feel anxious or easily get upset over small things</label>
-  <select value={neuroticism} onChange={(e) => setNeuroticism(e.target.value)}>
+  <select value={neuroticism} onChange={(e) => setNeuroticism(e.target.value)} className="questionnaire-select-input">
     <option value="1">Strongly disagree</option>
     <option value="2">Disagree</option>
     <option value="3">Neutral</option>
@@ -184,10 +222,10 @@ const QuestionnaireForm = () => {
   </select>
 </div>
 
-<div className="form-element">
+<div className="questionnaire-form-element">
   <label>Travel Preferences:</label>
-  <div className="preferences-container">
-    <div className="preference-item">
+  <div className="questionnaire-preferences-container">
+    <div className="questionnaire-preference-item">
       <input
         type="checkbox"
         name="historical"
@@ -196,7 +234,7 @@ const QuestionnaireForm = () => {
       />
       <label>Exploring historical sites</label>
     </div>
-    <div className="preference-item">
+    <div className="questionnaire-preference-item">
       <input
         type="checkbox"
         name="outdoor"
@@ -205,7 +243,7 @@ const QuestionnaireForm = () => {
       />
       <label>Engaging in outdoor adventures (e.g., hiking, rafting)</label>
     </div>
-    <div className="preference-item">
+    <div className="questionnaire-preference-item">
       <input
         type="checkbox"
         name="beach"
@@ -214,7 +252,7 @@ const QuestionnaireForm = () => {
       />
       <label>Relaxing on a beach</label>
     </div>
-    <div className="preference-item">
+    <div className="questionnaire-preference-item">
       <input
         type="checkbox"
         name="cuisine"
@@ -223,7 +261,7 @@ const QuestionnaireForm = () => {
       />
       <label>Experiencing local cuisine and shopping</label>
     </div>
-    <div className="preference-item">
+    <div className="questionnaire-preference-item">
       <input
         type="checkbox"
         name="cultural"
@@ -234,7 +272,9 @@ const QuestionnaireForm = () => {
     </div>
   </div>
 </div>
-<button type="submit">Submit</button>
+
+{error && <div className="error-message">{error}</div>}
+<button type="submit" className="questionnaire-form-button">Submit</button>
 
 </form>
 

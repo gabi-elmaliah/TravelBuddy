@@ -1,4 +1,4 @@
-.form-container {
+.questionnaire-form-container {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
@@ -10,18 +10,18 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.form-element {
+.questionnaire-form-element {
   display: flex;
   flex-direction: column;
   margin-bottom: 15px;
 }
 
-.form-element label {
+.questionnaire-form-element label {
   margin-bottom: 5px;
   font-weight: bold;
 }
 
-.age-input {
+.questionnaire-age-input {
   width: 100px;
   padding: 8px;
   border: 1px solid #ccc;
@@ -29,14 +29,14 @@
   text-align: center;
 }
 
-select, input[type="checkbox"] {
+.questionnaire-select-input, input[type="checkbox"] {
   margin-top: 5px;
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
 }
 
-button {
+.questionnaire-form-button {
   grid-column: span 2;
   padding: 10px 20px;
   background-color: #007BFF;
@@ -47,32 +47,48 @@ button {
   margin-top: 20px;
 }
 
-button:hover {
+.questionnaire-form-button:hover {
   background-color: #0056b3;
 }
 
-.form-container > div {
+.questionnaire-form-container > div {
   grid-column: span 2;
   display: flex;
   justify-content: center;
 }
 
-.calendar-container, .search-bar-container {
+.questionnaire-calendar-container, .search-bar-container {
   grid-column: span 2;
   display: flex;
   justify-content: center;
 }
 
-.preferences-container {
+.questionnaire-preferences-container {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
-.preference-item {
+.questionnaire-preference-item {
   display: flex;
   align-items: center;
+  margin-right: 10px;
+  font-size: 14px; /* Reduce font size */
+  padding: 5px; /* Reduce padding */
+}
+.questionnaire-preference-item input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin-right: 5px;
 }
 
-.preference-item input[type="checkbox"] {
-  margin-right: 10px;
+/* Styling for the error message */
+.error-message {
+  color: red;
+  font-size: 16px;
+  margin-top: 20px;
+  border: 1px solid red;
+  background-color: #ffe6e6;
+  padding: 10px;
+  border-radius: 4px;
 }

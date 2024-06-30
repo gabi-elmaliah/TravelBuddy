@@ -2,8 +2,11 @@ import React from 'react';
 import Footer from "../components/Footer";
 import Hero from "../components/Hero";
 import Navbar from "../components/Navbar";
+import DailyTripDetails from '../components/DailyTripDetails';
 
 function Home() {
+
+  
   return (
     <>
       <Navbar />
@@ -15,6 +18,10 @@ function Home() {
         url="/login"
         btnClass="show"
       />
+      <DailyTripDetails/>
+
+
+      
     
       <Footer />
     </>

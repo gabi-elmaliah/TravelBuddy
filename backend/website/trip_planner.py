@@ -45,7 +45,7 @@ def create_prompt_for_cluster(cluster_means, destination, start_date, end_date):
             {{
                 // This is an example template. Please create similar entries for each day of the trip. 
                 "day": "Example Day", // from the first day till the last day
-                 "date": "Date Object", 
+                "date": "Date Object", 
             
                  //Please provide a plan for each day that includes one or two activities:
                 "activities": [

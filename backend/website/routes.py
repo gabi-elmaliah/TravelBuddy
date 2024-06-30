@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, flash, jsonify,redirect,url_for,send_from_directory,current_app
-from .models import User,  PersonalityProfile,UserPreferences,Trip
+from .models import User,  PersonalityProfile,UserPreferences,Trip,DailyTrip
 from website import db, db_path
 from .auth import token_required
 from .clustering import update_user_clusters
@@ -142,6 +142,29 @@ def like_trip(current_user):
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': 'Error processing request: ' + str(e)}), 500
+    
+
+@routes.route('/daily-trip', methods=['GET'])
+@token_required
+def get_daily_trip(current_user):
+    user = current_user
+    daily_trip = DailyTrip.query.filter_by(cluster_id=user.cluster).first()
+    if not daily_trip:
+        return jsonify({"message": "No trip found for your cluster"}), 404
+
+    group_members = User.query.filter_by(cluster=user.cluster, group=user.group).all()
+    group_member_info = [{'user_name': member.user_name, 'email': member.email} for member in group_members]
+
+
+    return jsonify({
+        "trip": {
+            "destination": daily_trip.destination,
+            "start_date": daily_trip.start_date.isoformat(),
+            "end_date": daily_trip.end_date.isoformat(),
+            "details": daily_trip.details
+        },
+        "group_members": group_member_info
+    })
 
 
     
@@ -161,7 +184,8 @@ def submit_questionnaire(current_user):
     data = request.get_json()
     # Validate the data
     required_fields = ['age', 'budget', 'openness', 'conscientiousness', 'extraversion', 'agreeableness', 'neuroticism',
-                       'activity_historical', 'activity_outdoor', 'activity_beach', 'activity_cuisine', 'activity_cultural']
+                       'activity_historical', 'activity_outdoor', 'activity_beach', 'activity_cuisine', 'activity_cultural','destination',
+                       'start_date','end_date']
     
     for field in required_fields:
         if field not in data:
@@ -180,6 +204,9 @@ def submit_questionnaire(current_user):
         activity_beach = data['activity_beach']
         activity_cuisine = data['activity_cuisine']
         activity_cultural = data['activity_cultural']
+        destination=data['detination']
+        start_date=data['start_date']
+        end_date=data['end_date']
 
         # Create or update PersonalityProfile
         print("personality profile")
@@ -207,11 +234,12 @@ def submit_questionnaire(current_user):
         preferences.activity_beach = activity_beach
         preferences.activity_cuisine = activity_cuisine
         preferences.activity_cultural = activity_cultural
+        preferences.intended_destination = destination
+        preferences.intended_start_date = start_date
+        preferences.intended_end_date = end_date
+
 
         db.session.commit()
-
-        print("clustering:")
-        update_user_clusters(db_path)
 
         return jsonify({'message': 'Questionnaire submitted successfully'}), 200
 
