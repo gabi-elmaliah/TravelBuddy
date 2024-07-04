@@ -25,6 +25,7 @@ const LoginForm = () => {
       if (response.status === 200) {
         // Save the token to localStorage
         localStorage.setItem('token', response.data.token);
+        localStorage.setItem('user_name', response.data.user_name);
         console.log(response.data.message);
         navigate('/');  // Navigate to a protected route on successful login
 

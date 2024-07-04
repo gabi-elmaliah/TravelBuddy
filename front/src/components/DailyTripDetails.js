@@ -1,15 +1,29 @@
 import React, { useEffect, useState } from 'react';
-import './DailyTripDetails.css'
+import './DailyTripDetails.css';
+import { jwtDecode } from 'jwt-decode'
 import axios from 'axios';
 
 export default function DailyTripDetails() {
     const [tripDetails, setTripDetails] = useState([]);
     const [groupMembers, setGroupMembers] = useState([]);
+    const [joinedMembers, setJoinedMembers] = useState([]);
     const [error, setError] = useState(null);
     const [destination,setDestination]=useState("")
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
     const [loading, setLoading] = useState(true);
+    const [tripId, setTripId] = useState(null);
+
+     // Decode the token and retrieve the user_name
+  const token = localStorage.getItem('token');
+  let user_name = '';
+
+  if (token) {
+    const decodedToken = jwtDecode(token);
+    user_name = decodedToken.user_name;
+  }
+
+    
 
 
 
@@ -42,13 +56,15 @@ export default function DailyTripDetails() {
               const parsedTripDetails=JSON.parse(parsedDetails);
 
               console.log('Parsed trip details:', parsedTripDetails); // Log the parsed trip details
-
+              setTripId(data.trip.id);
               setTripDetails(parsedTripDetails.trip_details);
               setStartDate(new Date(data.trip.start_date).toLocaleDateString());
               setEndDate(new Date(data.trip.end_date).toLocaleDateString());
               setDestination(data.trip.destination)
               setGroupMembers(data.group_members);
-              console.log("Trip Details:",tripDetails )
+              setJoinedMembers(data.joined_members);
+
+              console.log("Trip Details:",tripDetails );
 
           } else {
               setTripDetails(null);
@@ -72,7 +88,37 @@ export default function DailyTripDetails() {
           }
         }
         fetchTripDetails();
-      }, []);
+      }, [token]); //try without a token later
+
+
+
+      const handleJoinTrip = async () => {
+        try {
+            const response = await axios.post('http://localhost:5000/join-trip', {
+                trip_id: tripId,
+            }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-access-token': localStorage.getItem('token'),
+                },
+            });
+
+            if (response.status === 200) {
+                alert('You have successfully joined the trip.');
+                setJoinedMembers([...joinedMembers, { user_name}]);
+            }
+        } catch (error) {
+            if (error.response) {
+                setError(`Error ${error.response.status}: ${error.response.data.message}`);
+            } else if (error.request) {
+                setError("Error: No response from the server.");
+            } else {
+                setError("Error: " + error.message);
+            }
+        }
+    };
+
+
 
 
     if (loading) {
@@ -122,12 +168,15 @@ export default function DailyTripDetails() {
               <p key={index}>{member.user_name} ({member.email})</p>
             ))}
           </div>
+
+          <div className="joined-members">
+                <h3>Joined Members:</h3>
+                {joinedMembers.map((member, index) => (
+                    <p key={index}>{member.user_name} </p>
+                ))}
+          </div>
+            <button onClick={handleJoinTrip}>Join Trip</button>
         </div>
       );
-
-      
-
-
-
-
+    
 }

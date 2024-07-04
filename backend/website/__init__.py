@@ -22,6 +22,11 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
     db.init_app(app)
 
+    migrate = Migrate(app, db)
+
+    # Import your models here
+    from website import models
+
 
     from .routes import routes
     from .auth import auth

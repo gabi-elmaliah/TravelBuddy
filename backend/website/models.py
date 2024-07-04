@@ -18,6 +18,9 @@ class User(db.Model, UserMixin):
     personality_profile = db.relationship('PersonalityProfile', backref='user', uselist=False, lazy='joined')
     preferences = db.relationship('UserPreferences', backref='user', uselist=False, lazy='joined')
     liked_trips = db.relationship('Trip', secondary=user_trips, backref='liked_by')
+    joined_trips = db.relationship('JoinedTrip', backref='user', lazy='dynamic')
+
+    
 
 class PersonalityProfile(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -38,8 +41,6 @@ class UserPreferences(db.Model):
     activity_beach = db.Column(db.Boolean)
     activity_cuisine = db.Column(db.Boolean)
     activity_cultural = db.Column(db.Boolean)
-
-    # New fields for trip intentions
     intended_destination = db.Column(db.String(150))
     intended_start_date = db.Column(db.Date)
     intended_end_date = db.Column(db.Date)
@@ -75,6 +76,15 @@ class DailyTrip(db.Model):
     start_date = db.Column(db.Date, nullable=False)
     end_date = db.Column(db.Date, nullable=False)
     details = db.Column(db.Text, nullable=False)
+    # Add a relationship to JoinedTrip
+    joined_users = db.relationship('JoinedTrip', backref='daily_trip', lazy='dynamic')
+    
+
+class JoinedTrip(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    trip_id = db.Column(db.Integer, db.ForeignKey('daily_trip.id'), nullable=False)
+
 # Helper function to fetch users in the same group
 def get_users_in_group(group_number):
     return User.query.filter_by(group=group_number).all()

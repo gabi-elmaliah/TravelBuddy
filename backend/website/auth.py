@@ -28,7 +28,7 @@ def token_required(f):
             current_user=User.query.filter_by(id=data['user_id']).first()
         except Exception as e :
             print(e)
-            return jsonify({'message':'Token is invalid '}),403
+            return jsonify({'message':'Token is invalid, Please log in again '}),403
         
         return f(current_user,*args,**kwargs)
     
@@ -54,7 +54,7 @@ def login():
         return jsonify({'message': 'User does not exist'}), 401
     
     if check_password_hash(user.password,password):
-        token=jwt.encode({'user_id':user.id,'exp':datetime.datetime.utcnow()+datetime.timedelta(hours=24)},current_app.config['SECRET_KEY'])
+        token=jwt.encode({'user_id':user.id,'user_name':user.user_name,'exp':datetime.datetime.utcnow()+datetime.timedelta(hours=24)},current_app.config['SECRET_KEY'])
         return jsonify({'token':token.decode("UTF-8")})
     
         
@@ -79,7 +79,7 @@ def sign_up():
     db.session.add(new_user)
     db.session.commit()
     print(new_user)
-    token=jwt.encode({'user_id':new_user.id,'exp':datetime.datetime.utcnow()+datetime.timedelta(hours=24)},current_app.config['SECRET_KEY'])
+    token=jwt.encode({'user_id':new_user.id,'user_name':user.user_name,'exp':datetime.datetime.utcnow()+datetime.timedelta(hours=24)},current_app.config['SECRET_KEY'])
     # db.session.close()
     return jsonify({'token':token.decode("UTF-8")}),201
 

@@ -1,11 +1,11 @@
 from flask import Blueprint, render_template, request, flash, jsonify,redirect,url_for,send_from_directory,current_app
-from .models import User,  PersonalityProfile,UserPreferences,Trip,DailyTrip
+from .models import User,  PersonalityProfile,UserPreferences,Trip,DailyTrip,JoinedTrip
 from website import db, db_path
 from .auth import token_required
 from .clustering import update_user_clusters
 from datetime import datetime
 from  .db_utils import get_user_data
-#from .trip_planner import generate_trip,create_prompt
+from .trip_planner import generate_trip,create_prompt
 from .utils import calculate_similarity,parse_iso_date
 import json
 from sqlalchemy.exc import SQLAlchemyError
@@ -16,7 +16,6 @@ routes=Blueprint('routes',__name__)
 
 
 
-""" 
          
 @routes.route('/generate-trip', methods=['POST'])
 @token_required
@@ -30,14 +29,14 @@ def make_trip(current_user):
         return jsonify({'error': 'Destination, start date, and end date are required'}), 400
     
     # Get user data
-    user, personality_profile, user_preferences = get_user_data(current_user.id)
+    personality_profile, user_preferences = get_user_data(current_user.id)
 
     # Create prompt for OpenAI API
     prompt =create_prompt(personality_profile, user_preferences, destination, start_date, end_date)
     print(type(prompt))
     # Generate trip details using OpenAI API
     try:
-    #    trip_details =generate_trip(prompt)
+        trip_details =generate_trip(prompt)
         new_trip = Trip(
             destination=destination,
             start_date=start_date,
@@ -56,7 +55,6 @@ def make_trip(current_user):
         'trip': trip_details
     }), 200
 
-"""
 
 @routes.route('/top-users', methods=['GET'])
 @token_required
@@ -155,28 +153,21 @@ def get_daily_trip(current_user):
     group_members = User.query.filter_by(cluster=user.cluster, group=user.group).all()
     group_member_info = [{'user_name': member.user_name, 'email': member.email} for member in group_members]
 
+    joined_members = JoinedTrip.query.filter_by(trip_id=daily_trip.id).all()
+    joined_member_info = [{"user_name": User.query.get(j.user_id).user_name} for j in joined_members if User.query.get(j.user_id).group == current_user.group and User.query.get(j.user_id).cluster == current_user.cluster]
+
 
     return jsonify({
         "trip": {
+            "id": daily_trip.id,
             "destination": daily_trip.destination,
             "start_date": daily_trip.start_date.isoformat(),
             "end_date": daily_trip.end_date.isoformat(),
             "details": daily_trip.details
         },
-        "group_members": group_member_info
+        "group_members": group_member_info,
+        "joined_members": joined_member_info
     })
-
-
-    
-
-
-
-    
-    
-
-
-
-
 
 @routes.route('/submit-questionnaire', methods=['POST'])
 @token_required
@@ -256,6 +247,26 @@ def submit_questionnaire(current_user):
 
     
  
+@routes.route('/join-trip', methods=['POST'])
+@token_required
+def join_trip(current_user):
+    data = request.get_json()
+    trip_id = data.get('trip_id')
+
+    if not trip_id:
+        return jsonify({'error': 'Trip ID is required'}), 400
+
+    # Check if the user already joined the trip
+    existing_join = JoinedTrip.query.filter_by(user_id=current_user.id, trip_id=trip_id).first()
+    if existing_join:
+        return jsonify({'message': 'You have already joined this trip'}), 200
+
+    # Create a new join entry
+    new_join = JoinedTrip(user_id=current_user.id, trip_id=trip_id)
+    db.session.add(new_join)
+    db.session.commit()
+
+    return jsonify({'message': 'Trip joined successfully'}), 200
 
 
 
