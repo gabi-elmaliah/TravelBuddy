@@ -18,6 +18,7 @@ import axios from "axios";
 function PlanTrip(){
     const [results, setResults] = useState([]);
     const [startDate, setStartDate] = useState(new Date());
+    const [tripId, setTripId] = useState(null);
     const [endDate, setEndDate] = useState(new Date());
     const [destination,setDestination]=useState("");
     const [tripDetails,setTripDetails]=useState(null);
@@ -60,8 +61,10 @@ function PlanTrip(){
 
         try {
             const response = await axios.post('http://localhost:5000/generate-trip', tripData,config);
-            console.log("Response data:", response.data.trip);
-            setTripDetails(JSON.parse(response.data.trip))
+            console.log("Response data:", response.data.trip.details);
+            setTripDetails(JSON.parse(response.data.trip.details))
+            console.log("generate Trip Id: ", response.data.trip.id)
+            setTripId(response.data.trip.id)
         } catch (error) {
             // Detailed error handling
             if (error.response) {
@@ -94,7 +97,8 @@ function PlanTrip(){
                 {error &&  <div>{error}</div>}
                 {isPending &&  <div>Loading...</div>}
                 {error && <div className="error">{error}</div>}                
-                <TripDetails trip={tripDetails} 
+                <TripDetails trip={tripDetails}
+                    tripId={tripId} 
                     destination={destination} 
                     currentUserToken={currentUserToken} 
                     startDate={startDate} endDate={endDate} />                 

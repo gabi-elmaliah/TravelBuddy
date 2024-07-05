@@ -25,7 +25,7 @@ def create_app():
     migrate = Migrate(app, db)
 
     # Import your models here
-    from website import models
+    from .models import User, PersonalityProfile, UserPreferences, Trip, DailyTrip, JoinedTrip
 
 
     from .routes import routes

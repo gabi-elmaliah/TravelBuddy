@@ -12,20 +12,32 @@ export default function LikeButton({tripDetails,userToken})
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState(null);
 
-    const toggleLike = async () => {
-        if (liked) {
-            setLiked(false);  // Optionally handle unlike
-        } else {
-            setIsSubmitting(true);
-            try {
+    const toggleLike = async () => 
+        {
+        setIsSubmitting(true);
+        setError(null);
+        try {
+            if (liked) {
+                // Handle unlike
+                const response = await axios.delete(`http://localhost:5000/unlike-trip/${tripDetails.tripid}`, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-access-token': userToken
+                    }
+                });
+                console.log(response.data.message);
+                setLiked(false);
+            } else {
+                // Handle like
                 const response = await axios.post('http://localhost:5000/like-trip', tripDetails, {
                     headers: {
                         'Content-Type': 'application/json',
-                        'x-access-token': userToken 
+                        'x-access-token': userToken
                     }
                 });
-                setLiked(true);
                 console.log(response.data.message);
+                setLiked(true);
+            }
             } catch (error) {
                 if (error.response) {
                     // The request was made and the server responded with a status code
@@ -43,18 +55,21 @@ export default function LikeButton({tripDetails,userToken})
                 setIsSubmitting(false);
             }
         }
-    };
 
-    return (
-        <div>
-            <button onClick={toggleLike} style={{ border: 'none', background: 'none' ,fontSize: '40px' }}>
-                {liked ? <FontAwesomeIcon icon={fasHeart} style={{ color: 'red' }} />
-                    : <FontAwesomeIcon icon={farHeart} style={{ color: 'red' , fontSize: '40px' }} />}
-            </button>
-            {isSubmitting && <span>Loading...</span>}
-            {error && <div>Error: {error}</div>}        
-        </div>
-  );
+        return (
+            <div>
+                <button onClick={toggleLike} style={{ border: 'none', background: 'none' ,fontSize: '40px' }}>
+                    {liked ? <FontAwesomeIcon icon={fasHeart} style={{ color: 'red' }} />
+                        : <FontAwesomeIcon icon={farHeart} style={{ color: 'red' , fontSize: '40px' }} />}
+                </button>
+                {isSubmitting && <span>Loading...</span>}
+                {error && <div>Error: {error}</div>}        
+            </div>
+      );
 
 
-}
+};
+
+    
+
+

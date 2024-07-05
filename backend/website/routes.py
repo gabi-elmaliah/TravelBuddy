@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, flash, jsonify,redirect,url_for,send_from_directory,current_app
-from .models import User,  PersonalityProfile,UserPreferences,Trip,DailyTrip,JoinedTrip
+from .models import User,  PersonalityProfile,UserPreferences,Trip,DailyTrip,JoinedTrip,user_trips
 from website import db, db_path
 from .auth import token_required
 from .clustering import update_user_clusters
@@ -8,6 +8,7 @@ from  .db_utils import get_user_data
 from .trip_planner import generate_trip,create_prompt
 from .utils import calculate_similarity,parse_iso_date
 import json
+import logging
 from sqlalchemy.exc import SQLAlchemyError
 
 
@@ -22,21 +23,31 @@ routes=Blueprint('routes',__name__)
 def make_trip(current_user):
     data = request.get_json()
     destination = data.get('destination')
-    start_date = data.get('start_date')
-    end_date = data.get('end_date')
+    start_date_str = data.get('start_date')
+    end_date_str = data.get('end_date')
 
-    if not destination or not start_date or not end_date:
+    if not destination or not start_date_str or not end_date_str:
         return jsonify({'error': 'Destination, start date, and end date are required'}), 400
     
-    # Get user data
-    personality_profile, user_preferences = get_user_data(current_user.id)
-
-    # Create prompt for OpenAI API
-    prompt =create_prompt(personality_profile, user_preferences, destination, start_date, end_date)
-    print(type(prompt))
-    # Generate trip details using OpenAI API
     try:
-        trip_details =generate_trip(prompt)
+        # Convert string dates to datetime objects and then to date objects
+        start_date = datetime.strptime(start_date_str, "%Y-%m-%dT%H:%M:%S.%fZ").date()
+        end_date = datetime.strptime(end_date_str, "%Y-%m-%dT%H:%M:%S.%fZ").date()
+
+
+        # Get user data
+        user, personality_profile, user_preferences = get_user_data(current_user.id)
+        if not personality_profile or not user_preferences:
+            return jsonify({'error': 'Personality profile and user preferences are required'}), 400
+
+        # Create prompt for OpenAI API
+        prompt = create_prompt(personality_profile, user_preferences, destination, start_date, end_date)
+        logging.info(f"Prompt created: {prompt}")
+        
+        # Generate trip details using OpenAI API
+        trip_details = generate_trip(prompt)
+        logging.info(f"Generated trip details: {trip_details}")
+
         new_trip = Trip(
             destination=destination,
             start_date=start_date,
@@ -45,16 +56,20 @@ def make_trip(current_user):
         )
         db.session.add(new_trip)
         db.session.commit()
-        
+
     except Exception as e:
+        logging.error(f"Error in make_trip: {str(e)}")
+        db.session.rollback()
         return jsonify({'error': str(e)}), 500
 
     # Return the generated trip details
     return jsonify({
         'message': 'Trip generated successfully',
-        'trip': trip_details
+        'trip': {
+            'id': new_trip.id,
+            'details': trip_details
+        }
     }), 200
-
 
 @routes.route('/top-users', methods=['GET'])
 @token_required
@@ -141,6 +156,30 @@ def like_trip(current_user):
         db.session.rollback()
         return jsonify({'error': 'Error processing request: ' + str(e)}), 500
     
+
+@routes.route('/unlike-trip/<int:trip_id>', methods=['DELETE'])
+@token_required
+def unlike_trip(current_user, trip_id):
+    try:
+        print(f"User {current_user.id} attempting to unlike trip {trip_id}")
+        trip = Trip.query.get(trip_id)
+        if not trip:
+            print(f"Trip with ID {trip_id} not found")
+            return jsonify({'error': 'Trip not found'}), 404
+
+        if trip not in current_user.liked_trips:
+            print(f"Trip with ID {trip_id} not liked by user {current_user.id}")
+            return jsonify({'error': 'Trip not liked by user'}), 400
+
+        current_user.liked_trips.remove(trip)
+        db.session.commit()
+        print(f"Trip with ID {trip_id} unliked successfully")
+        return jsonify({'message': 'Trip unliked successfully'}), 200
+    except Exception as e:
+        print(f"Error unliking trip: {str(e)}")
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 500
+
 
 @routes.route('/daily-trip', methods=['GET'])
 @token_required

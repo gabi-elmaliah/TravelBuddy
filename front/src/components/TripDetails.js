@@ -3,7 +3,7 @@ import "./TripDetails.css"
 import LikeButton from './LikeButton';
 
 
-export default function TripDetails({trip,currentUserToken,destination,startDate,endDate})
+export default function TripDetails({trip,tripId,currentUserToken,destination,startDate,endDate})
 {
     if (!trip) return null;  // Render nothing if no trip data is available
 
@@ -24,12 +24,15 @@ export default function TripDetails({trip,currentUserToken,destination,startDate
                     </div>
                 ))}
             </div>
-            <LikeButton tripDetails={{
+            <LikeButton tripDetails={
+                {
+                    tripid:tripId,
                     destination: destination,
                     start_date: startDate,
                     end_date: endDate,
                     trip_details: trip.trip_details
-                    }} userToken={currentUserToken} />
+                }
+                    } userToken={currentUserToken} />
             
         </div>
     );
