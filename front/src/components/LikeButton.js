@@ -6,9 +6,8 @@ import axios from "axios";
 
 
 
-export default function LikeButton({tripDetails,userToken})
+export default function LikeButton({tripDetails, userToken,liked, setLiked})
 {
-    const [liked, setLiked] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState(null);
 
@@ -29,7 +28,7 @@ export default function LikeButton({tripDetails,userToken})
                 setLiked(false);
             } else {
                 // Handle like
-                const response = await axios.post('http://localhost:5000/like-trip', tripDetails, {
+                const response = await axios.post('http://localhost:5000/like-trip', {tripid:tripDetails.tripid}, {
                     headers: {
                         'Content-Type': 'application/json',
                         'x-access-token': userToken

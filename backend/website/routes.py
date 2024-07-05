@@ -56,6 +56,7 @@ def make_trip(current_user):
         )
         db.session.add(new_trip)
         db.session.commit()
+        logging.info(f"New trip committed to database with ID: {new_trip.id}")
 
     except Exception as e:
         logging.error(f"Error in make_trip: {str(e)}")
@@ -121,30 +122,19 @@ def like_trip(current_user):
         if not data:
             return jsonify({'error': 'No data provided'}), 400
         
-        
-        trip_details = json.dumps(data['trip_details'])
-        # Parse the start and end dates from the input
-        start_date = parse_iso_date(data['start_date'])
-        end_date = parse_iso_date(data['end_date'])
-        destination=data['destination']
+        trip_id = data['tripid']  # Assuming tripid is sent from the frontend
+        trip = Trip.query.get(trip_id)
 
-        if not all([trip_details, destination, start_date, end_date]):
-            return jsonify({'error': 'Missing required trip details'}), 400
-        
-    
-        new_trip = Trip(
-            destination=destination,
-            start_date=start_date,
-            end_date=end_date,
-            details=trip_details  # Store the JSON string
-        )
+        if not trip:
+            return jsonify({'error': 'Trip not found'}), 404
 
-        db.session.add(new_trip)
-        current_user.liked_trips.append(new_trip)
+        if trip in current_user.liked_trips:
+            return jsonify({'message': 'Trip already liked'}), 200
+
+        current_user.liked_trips.append(trip)
         db.session.commit()
 
-
-        return jsonify({'message': 'Trip liked and saved successfully'}), 200
+        return jsonify({'message': 'Trip liked successfully'}), 200
 
     except KeyError as e:
         db.session.rollback()
@@ -155,7 +145,6 @@ def like_trip(current_user):
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': 'Error processing request: ' + str(e)}), 500
-    
 
 @routes.route('/unlike-trip/<int:trip_id>', methods=['DELETE'])
 @token_required

@@ -25,6 +25,7 @@ function PlanTrip(){
     const [isPending,setIsPending]=useState(false);
     const [error,setError]=useState(null);
     const [showResults, setShowResults] = useState(true);
+    const [liked, setLiked] = useState(false);  // New state for like button
 
     const currentUserToken = localStorage.getItem('token');
 
@@ -44,6 +45,7 @@ function PlanTrip(){
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsPending(true);
+        setLiked(false);  
         setError(null); 
         const tripData = {
           destination:destination,  
@@ -96,12 +98,31 @@ function PlanTrip(){
                 </form>
                 {error &&  <div>{error}</div>}
                 {isPending &&  <div>Loading...</div>}
-                {error && <div className="error">{error}</div>}                
-                <TripDetails trip={tripDetails}
-                    tripId={tripId} 
-                    destination={destination} 
-                    currentUserToken={currentUserToken} 
-                    startDate={startDate} endDate={endDate} />                 
+                {error && <div className="error">{error}</div>}   
+
+                {tripDetails &&(
+                    <>
+
+                        <TripDetails trip={tripDetails} 
+                            destination={destination} 
+                            currentUserToken={currentUserToken} 
+                            startDate={startDate} endDate={endDate} />    
+
+
+                        <LikeButton tripDetails={{
+                            tripid:tripId,
+                            destination: destination,
+                            start_date: startDate,
+                            end_date: endDate,
+                            trip_details: tripDetails  // Corrected this part
+                        }}
+                            userToken={currentUserToken}
+                            liked={liked}  
+                            setLiked={setLiked}  />
+
+                    </>
+                )}         
+                                        
             </div>
         </div>
         <Footer/>
