@@ -1,0 +1,82 @@
+/* General styles for the user trips page */
+/* General styles for the user trips page */
+.user-trips {
+    padding: 20px;
+    padding-top: 100px; /* Increased padding to accommodate the navbar */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: Arial, sans-serif;
+}
+h1 {
+    margin-bottom: 40px; /* Increased margin for better spacing */
+    padding: 20px; /* Added padding for better spacing */
+    color: #333;
+    font-size: 2.5em;
+    text-align: center;
+}
+/* Styles for the container holding the trip cards */
+.cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    width: 100%;
+}
+
+/* Styles for each trip card */
+.card {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    width: 200px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    overflow: hidden;
+    text-align: center;
+    background-color: #fff;
+}
+.card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Styles for the images in each trip card */
+.card-image {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Styles for the card content */
+.card h2 {
+    margin: 10px 0;
+    color: #555;
+}
+
+.card p {
+    color: #777;
+    margin-bottom: 10px;
+}
+
+/* Styles for the loading message */
+.loading {
+    font-size: 1.2em;
+    color: #555;
+}
+
+/* Styles for error messages */
+.error-message {
+    color: red;
+    font-size: 1.2em;
+    text-align: center;
+    margin: 20px 0;
+}
+
+/* Styles for informational messages */
+.message {
+    color: blue;
+    font-size: 1.2em;
+    text-align: center;
+    margin: 20px 0;
+}

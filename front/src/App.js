@@ -9,6 +9,7 @@ import SignUp from "./routes/SignUp";
 import Login from "./routes/Login";
 import Questionnaire from "./routes/Questionnaire";
 import PlanTrip from "./routes/PlanTrip";
+import UserTrips from './routes/UserTrips';
 
 export default function App() {
   return (
@@ -22,6 +23,7 @@ export default function App() {
         <Route path="/login" element={<Login/>} />
         <Route path="/questionnaire" element={<Questionnaire/>} /> 
         <Route path="/plantrip" element={<PlanTrip/>} /> 
+        <Route path="/userTrips" element={<UserTrips/>} /> 
 
       </Routes>
 
