@@ -302,6 +302,10 @@ def join_trip(current_user):
 def user_trips(current_user):
     try:
         trips = current_user.liked_trips
+
+        if not trips:
+            return jsonify({'message': 'You do not have any trips yet.'}), 200
+
         trips_data = [{
             'id': trip.id,
             'destination': trip.destination,
@@ -309,7 +313,10 @@ def user_trips(current_user):
             'end_date': trip.end_date.strftime('%Y-%m-%d'),
             'details': trip.details
         } for trip in trips]
+        
         return jsonify({'trips': trips_data}), 200
+    
+
     except Exception as e:
         logging.error(f"Error fetching user trips: {str(e)}")
         return jsonify({'error': 'Error fetching trips'}), 500

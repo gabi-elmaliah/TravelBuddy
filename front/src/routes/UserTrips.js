@@ -51,8 +51,33 @@ export default function UserTrips()
 
 
     const handleCardClick = (trip) => {
-        setSelectedTrip(trip);
+        if (selectedTrip && selectedTrip.id === trip.id) {
+            setSelectedTrip(null); 
+        } else {
+            setSelectedTrip(trip); 
+        }
     };
+
+    const handleDeleteClick = async (e,tripId) => {
+        e.stopPropagation(); //
+        try {
+            const response = await axios.delete(`http://localhost:5000/unlike-trip/${tripId}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-access-token': currentUserToken
+                }
+            });
+            if (response.status === 200) {
+                setTrips(trips.filter(trip => trip.id !== tripId)); // Remove trip from state
+            } else {
+                console.error('Error unliking trip:', response.data);
+            }
+        } catch (error) {
+            console.error('Error unliking trip:', error);
+        }
+    };
+
+
 
     const getCityImage = (cityName) => {
         const city = cities.find(city => city.name === cityName);
@@ -72,35 +97,28 @@ export default function UserTrips()
         return <div className="error-message">{error}</div>; // Error state
     }
 
+   
     return (
         <>
             <Navbar />
             <div className="user-trips">
-            <h1>My Trips</h1>
-            <div className="cards-container">
-                {trips.map(trip => (
-                    <div className="card" key={trip.id} onClick={() => handleCardClick(trip)}>
-                        <img src={getCityImage(trip.destination)} alt={trip.destination} className="card-image" />
-                        <h2>{trip.destination}</h2>
-                        <p>{trip.start_date} - {trip.end_date}</p>
-                    </div>
-                ))}
+                <h1>My Trips</h1>
+                <div className="cards-container">
+                    {trips.map(trip => (
+                        <div className="card" key={trip.id} onClick={() => handleCardClick(trip)}>
+                            <img src={getCityImage(trip.destination)} alt={trip.destination} className="card-image" />
+                            <h2>{trip.destination}</h2>
+                            <p>{trip.start_date} - {trip.end_date}</p>
+                            <button className="delete-button" onClick={(e) => handleDeleteClick(e,trip.id)}>Delete</button>
+                        </div>
+                    ))}
+                </div>
+                {selectedTrip && (
+                    <TripDetailsModal trip={selectedTrip} onClose={() => setSelectedTrip(null)} />
+                )}
             </div>
-            {selectedTrip && (
-                <TripDetailsModal
-                    trip={selectedTrip}
-                    onClose={() => setSelectedTrip(null)}
-                />
-            )}
-        </div>
-
-        
         </>
     );
-
-
-
-
 
 
 

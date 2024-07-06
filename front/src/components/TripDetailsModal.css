@@ -1,0 +1,77 @@
+/* Modal overlay to cover the entire screen */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000; /* Ensure the modal is on top of other elements */
+}
+
+/* Modal content container */
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 600px;
+    position: relative;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for a pop-out effect */
+    overflow-y: auto; /* Scrollable content if it overflows */
+    max-height: 90%; /* Limit height to prevent overflow */
+}
+
+/* Close button */
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: red;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2em;
+    line-height: 1;
+}
+
+/* Trip details container */
+.trip-details {
+    margin-top: 20px;
+}
+
+/* Styles for each day section */
+.day {
+    margin-bottom: 20px;
+}
+
+/* Styles for each activity */
+.activity {
+    margin-bottom: 10px;
+}
+
+/* Headings */
+h2 {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+h3 {
+    margin-bottom: 5px;
+    color: #555;
+}
+
+/* Paragraphs */
+p {
+    margin-bottom: 5px;
+    color: #777;
+}
