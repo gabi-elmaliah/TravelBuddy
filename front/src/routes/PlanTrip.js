@@ -87,9 +87,9 @@ function PlanTrip(){
 
     return(   
         <>
-        <Navbar />
         <div className="PlanTrip">
             <div className="search-bar-container">
+                <h1 className="plan-trip-heading">Make Your Own Trip</h1>
                 <SearchBar setResults={setResults} inputValue={destination} setInputValue={setDestination} setShowResults={setShowResults} />
                 {showResults && <SearchResultsList results={results} setDestination={handleSetDestination} />}
                 <CalendarCfg  setStartDate={setStartDate} setEndDate={setEndDate} />

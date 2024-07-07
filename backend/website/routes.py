@@ -176,7 +176,7 @@ def get_daily_trip(current_user):
     user = current_user
     daily_trip = DailyTrip.query.filter_by(cluster_id=user.cluster).first()
     if not daily_trip:
-        return jsonify({"message": "No trip found for your cluster"}), 404
+         return jsonify({"message": "You don't have a trip assigned yet. Please fill out the questionnaire, and you'll get your trip tomorrow."}), 200
 
     group_members = User.query.filter_by(cluster=user.cluster, group=user.group).all()
     group_member_info = [{'user_name': member.user_name, 'email': member.email} for member in group_members]

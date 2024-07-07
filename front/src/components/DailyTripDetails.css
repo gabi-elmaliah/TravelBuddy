@@ -6,6 +6,28 @@
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   }
+
+  /* Styles for the no trip message */
+.no-trip-message-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh; /* Adjusts height to vertically center the message */
+  text-align: center;
+}
+
+.no-trip-message {
+  font-size: 1.5em;
+  color: #555;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+}
+
+  
   
   .trip-details h2 {
     text-align: center;
@@ -28,6 +50,26 @@
     border-radius: 8px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
   }
+
+  .JoinTripBtn {
+    display: block;
+    width: 50%;
+    margin: 20px auto;
+    padding: 10px 0;
+    background-color: #2980b9;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    font-size: 16px;
+}
+
+.JoinTripBtn:hover {
+    background-color: #1a5276;
+    color: #fff;
+}
+
   
   .trip-day h3 {
     margin-bottom: 10px;

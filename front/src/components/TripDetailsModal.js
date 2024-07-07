@@ -1,9 +1,9 @@
 import React from 'react';
 import './TripDetailsModal.css';
 
-const TripDetailsModal = ({ trip }) => {
+const TripDetailsModal = ({ trip,onClose }) => {
     return (
-        <div className="modal-content">
+        <div className="modal-content" onClick={onClose} >
             <h2>Trip to {trip.destination}</h2>
             <p>{trip.start_date} - {trip.end_date}</p>
             <div className="trip-details">

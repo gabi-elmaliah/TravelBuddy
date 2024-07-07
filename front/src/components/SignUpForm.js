@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./SignUpFormStyles.css";
+import Button from '@mui/material/Button'; 
 
 
 export default function SignUpForm() {
@@ -31,8 +32,12 @@ export default function SignUpForm() {
         setError(response.data.error); // Set error message from response
       }
     } catch (error) {
-      console.error('There was an error!', error.response.data.error);
-      setError(error.response.data.error); // Set error message from catch
+      console.error('There was an error!', error);
+      if (error.response) {
+        setError(error.response.data.error); // Set error message from catch
+      } else {
+        setError('An unexpected error occurred. Please try again later.');
+      }
     }
   };
   return (
@@ -70,12 +75,14 @@ export default function SignUpForm() {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          <button type="submit">Submit</button>
+          <Button  type="submit" variant="contained" color="primary">SignUp</Button>
           {error && <div className="error">{error}</div>} {/* Display error message */}
         </form>
-        <p>
-          Have an account? <Link to="/login"> Login </Link>
-        </p>
+        <div className="LoginLink">
+          <p>
+            Don't have an account? <Link to="/login">Login</Link>
+          </p>
+        </div>
       </div>
     </div>
   );

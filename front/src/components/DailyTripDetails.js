@@ -8,6 +8,7 @@ export default function DailyTripDetails() {
     const [groupMembers, setGroupMembers] = useState([]);
     const [joinedMembers, setJoinedMembers] = useState([]);
     const [error, setError] = useState(null);
+    const [message, setMessage] = useState(null);
     const [destination,setDestination]=useState("")
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
@@ -66,6 +67,8 @@ export default function DailyTripDetails() {
 
               console.log("Trip Details:",tripDetails );
 
+            } else if (data.message) {
+              setMessage(data.message);
           } else {
               setTripDetails(null);
           }
@@ -93,6 +96,15 @@ export default function DailyTripDetails() {
 
 
       const handleJoinTrip = async () => {
+
+          // Check if the user is already in the list of joined members
+          const alreadyJoined = joinedMembers.some(member => member.user_name === user_name);
+          if (alreadyJoined) {
+              alert('You have already joined this trip.');
+              return;
+          }
+
+
         try {
             const response = await axios.post('http://localhost:5000/join-trip', {
                 trip_id: tripId,
@@ -126,9 +138,15 @@ export default function DailyTripDetails() {
   }
     
       
-    if (!tripDetails) {
-      return <div className="no-trip-message">You don't have a trip assigned yet. You will have a trip after tomorrow.</div>;
-  }
+  if (message) {
+    return (
+        <div className="no-trip-message-container">
+            <div className="no-trip-message">
+                {message}
+            </div>
+        </div>
+    );
+}
 
 
       if (error) {
@@ -175,7 +193,7 @@ export default function DailyTripDetails() {
                     <p key={index}>{member.user_name} </p>
                 ))}
           </div>
-            <button onClick={handleJoinTrip}>Join Trip</button>
+          <button onClick={handleJoinTrip} className='JoinTripBtn'>Join Trip</button>
         </div>
       );
     

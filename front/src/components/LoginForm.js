@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 
 
 
-const LoginForm = () => {
+const LoginForm = ({ onLogin }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null); // State to store error message
@@ -27,7 +27,8 @@ const LoginForm = () => {
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('user_name', response.data.user_name);
         console.log(response.data.message);
-        navigate('/');  // Navigate to a protected route on successful login
+        onLogin();
+        navigate('/plantrip');  // Navigate to a protected route on successful login
 
       } else {
         setError(response.data.message);  // Set error message from response
@@ -77,9 +78,11 @@ const LoginForm = () => {
           <Button  type="submit" variant="contained" color="primary">Login</Button>
         </form>
         {error && <div className="error">{error}</div>} {/* Display error message */}
-        <p>
-          Don't have an account? <Link to="/signup">Sign Up</Link>
-        </p>
+        <div className="signUpLink">
+          <p>
+            Don't have an account? <Link to="/signup">Sign Up</Link>
+          </p>
+        </div>
       </div>
     </div>
   );

@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './UserTrips.css';
-import TripDetailsModal from '../components/TripDetailsModal.js';
+import './UserTripsComponent.css';
+import TripDetailsModal from './TripDetailsModal.js';
 import cities from '../cities.js';
-import Navbar from "../components/Navbar.js";
 
 export default function UserTrips()
 {
@@ -100,7 +99,7 @@ export default function UserTrips()
    
     return (
         <>
-            <Navbar />
+
             <div className="user-trips">
                 <h1>My Trips</h1>
                 <div className="cards-container">

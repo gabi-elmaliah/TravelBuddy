@@ -72,6 +72,7 @@ def sign_up():
     email = data.get('email')
     user_name = data.get('user_name')
     password = data.get('password')
+
     user = User.query.filter_by(email=email).first()
     if user:
         return jsonify({'error': 'Email already in use'}), 409 
@@ -79,7 +80,7 @@ def sign_up():
     db.session.add(new_user)
     db.session.commit()
     print(new_user)
-    token=jwt.encode({'user_id':new_user.id,'user_name':user.user_name,'exp':datetime.datetime.utcnow()+datetime.timedelta(hours=24)},current_app.config['SECRET_KEY'])
+    token=jwt.encode({'user_id':new_user.id,'user_name':new_user.user_name,'exp':datetime.datetime.utcnow()+datetime.timedelta(hours=24)},current_app.config['SECRET_KEY'])
     # db.session.close()
     return jsonify({'token':token.decode("UTF-8")}),201
 
