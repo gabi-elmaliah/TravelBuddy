@@ -41,7 +41,7 @@ export default function App() {
           <Route path="/about" element={<About />} />
           <Route path="/service" element={<Service />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/signup" element={<SignUp />} />
+          <Route path="/signup" element={<SignUp onLogin={handleLogin} />} />
           <Route path="/login" element={<Login onLogin={handleLogin} />} />
           <Route path="/questionnaire" element={isAuthenticated ? <Questionnaire /> : <Navigate to="/login" />} />
           <Route path="/plantrip" element={isAuthenticated ? <PlanTrip /> : <Navigate to="/login" />} />

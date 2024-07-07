@@ -4,7 +4,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import SignUpForm from "../components/SignUpForm";
 
-function SignUp() {
+function SignUp({ onLogin }) {
   return (
     <>
       <Hero
@@ -13,7 +13,7 @@ function SignUp() {
         title="Sign Up"
         btnClass="hide"
       />
-      <SignUpForm />
+      <SignUpForm  onLogin={onLogin}  />
       <Footer />
     </>
   );

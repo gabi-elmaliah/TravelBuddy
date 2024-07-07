@@ -58,6 +58,12 @@ const QuestionnaireForm = () => {
       return;
     }
 
+    // Validate required fields
+    if (!age || !budget || !openness || !conscientiousness || !extraversion || !agreeableness || !neuroticism || !destination) {
+      setError('All fields are required.');
+      return;
+    }
+
      // Validate age range
      if (age < 20 || age > 60) {
       setError('Age must be between 20 and 60.');
@@ -106,7 +112,7 @@ const QuestionnaireForm = () => {
 
       if (response.status === 200) {
         console.log('Questionnaire submitted successfully');
-        navigate('/');
+        navigate('/dailytrip');
       }
     } catch (error) {
        // Detailed error handling

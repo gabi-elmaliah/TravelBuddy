@@ -6,7 +6,7 @@ import "./SignUpFormStyles.css";
 import Button from '@mui/material/Button'; 
 
 
-export default function SignUpForm() {
+export default function SignUpForm({onLogin}) {
   const [email, setEmail] = useState("");
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
@@ -27,7 +27,8 @@ export default function SignUpForm() {
         // Save the token to localStorage
         localStorage.setItem('token', response.data.token);
         console.log("User created successfully");
-        navigate('/questionnaire'); // Navigate to the home page on successful sign-up
+        onLogin();
+        navigate('/questionnaire'); 
       } else {
         setError(response.data.error); // Set error message from response
       }

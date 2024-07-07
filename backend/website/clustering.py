@@ -65,6 +65,7 @@ def fetch_user_data(db_path):
         personality_profile pp ON u.id = pp.user_id
     JOIN 
         user_preferences up ON u.id = up.user_id
+
     """
     
     # Read data into a DataFrame
