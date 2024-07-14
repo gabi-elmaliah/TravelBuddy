@@ -75,7 +75,7 @@ const LoginForm = ({ onLogin }) => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          <Button  type="submit" variant="contained" color="primary">SignUp</Button>
+          <Button  type="submit" variant="contained" color="primary">Login</Button>
         </form>
         {error && <div className="error">{error}</div>} {/* Display error message */}
         <div className="signUpLink">

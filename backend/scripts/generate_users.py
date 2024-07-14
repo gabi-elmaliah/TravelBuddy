@@ -18,7 +18,7 @@ def create_fake_data():
             # Create fake user data
             email = fake.email()
             user_name = fake.user_name()
-            password = fake.password()  # Consider hashing this password before production use
+            password ="ga210299"   # Consider hashing this password before production use
             # Assign a random budget category
             new_user = User(
                 email=email,

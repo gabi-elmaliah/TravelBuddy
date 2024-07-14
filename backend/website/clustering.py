@@ -112,6 +112,9 @@ def cluster_users_by_destination(data_df):
     cluster_offset = 0  # Initialize cluster offset
 
     for destination, group in data_df.groupby('intended_destination'):
+
+        if len(group) < 2:
+            continue  # Skip clustering if there are fewer than 2 samples
         
         features_to_scale = ['age', 'openness', 'conscientiousness', 'extraversion', 'agreeableness', 'neuroticism',
                              'budget', 'activity_historical', 'activity_outdoor', 'activity_beach', 'activity_cuisine', 'activity_cultural',
