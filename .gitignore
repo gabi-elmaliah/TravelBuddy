@@ -1,2 +1,11 @@
 .env
 front/node_modules/
+backend/__pycache__/
+backend/instance/
+.ipynb_checkpoints/
+.ls
+backend/migrations/
+backend/website/__pycache__/
+/backend/website/clustering_check.ipynb
+db.sqlite
+front/build/
