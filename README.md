@@ -11,6 +11,22 @@
 - **Authentication**: JWT
 - **Styling**: CSS (custom)
 
+## Features
+
+- User registration and login with JWT
+
+- Personality and travel preferences questionnaire
+
+- User clustering using the KMeans algorithm
+
+- View top 5 or 10 similar users
+
+- Generate AI-based trip itineraries using OpenAI
+
+- Save and view liked trips
+
+- Dashboard for questionnaire results and trip suggestions
+
 ## Getting Started
 
 ### 1. Clone the repository
@@ -48,22 +64,6 @@ npm start
 Create a .env file in the backend/ directory with the following content:
 
 OPENAI_API_KEY=your_openai_api_key_here
-
-## Features
-
-- User registration and login with JWT
-
-- Personality and travel preferences questionnaire
-
-- User clustering using the KMeans algorithm
-
-- View top 5 or 10 similar users
-
-- Generate AI-based trip itineraries using OpenAI
-
-- Save and view liked trips
-
-- Dashboard for questionnaire results and trip suggestions
 
 ## API Endpoints
 
