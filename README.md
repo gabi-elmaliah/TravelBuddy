@@ -52,8 +52,6 @@ python app.py
 ### 3. Frontend Setup (React)
 
 ```bash
-Copy
-Edit
 cd front
 npm install
 npm start
@@ -80,7 +78,7 @@ OPENAI_API_KEY=your_openai_api_key_here
 
 | Endpoint                  | Method | Auth Required | Description                                  |
 |---------------------------|--------|----------------|----------------------------------------------|
-| `/submit-questionnaire`   | POST   | ✅ Yes         | Submit user’s personality and preferences     |
+| `/submit-questionnaire`   | POST   |  Yes         | Submit user’s personality and preferences     |
 
 ---
 
@@ -88,10 +86,10 @@ OPENAI_API_KEY=your_openai_api_key_here
 
 | Endpoint           | Method | Auth Required | Description                                     |
 |--------------------|--------|----------------|-------------------------------------------------|
-| `/generate-trip`   | POST   | ✅ Yes         | Generate a trip using OpenAI                    |
-| `/like-trip`       | POST   | ✅ Yes         | Like a generated trip                           |
-| `/unlike-trip/<id>`| DELETE | ✅ Yes         | Remove a liked trip                             |
-| `/user-trips`      | GET    | ✅ Yes         | Get list of trips liked by the user             |
+| `/generate-trip`   | POST   |  Yes         | Generate a trip using OpenAI                    |
+| `/like-trip`       | POST   |  Yes         | Like a generated trip                           |
+| `/unlike-trip/<id>`| DELETE |  Yes         | Remove a liked trip                             |
+| `/user-trips`      | GET    |  Yes         | Get list of trips liked by the user             |
 
 ---
 
@@ -99,6 +97,6 @@ OPENAI_API_KEY=your_openai_api_key_here
 
 | Endpoint           | Method | Auth Required | Description                                     |
 |--------------------|--------|----------------|-------------------------------------------------|
-| `/top-users`       | GET    | ✅ Yes         | Get top N most similar users in the same cluster|
-| `/daily-trip`      | GET    | ✅ Yes         | Get the assigned daily trip based on cluster    |
-| `/join-trip`       | POST   | ✅ Yes         | Join a group trip                               |
+| `/top-users`       | GET    |  Yes         | Get top N most similar users in the same cluster|
+| `/daily-trip`      | GET    |  Yes         | Get the assigned daily trip based on cluster    |
+| `/join-trip`       | POST   |  Yes         | Join a group trip                               |
