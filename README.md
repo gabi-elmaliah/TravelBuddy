@@ -2,7 +2,7 @@
 
 **TravelBuddy** is a personalized trip planning web application that uses user personality and travel preferences to generate customized trip itineraries.
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **Frontend**: React, Axios
 - **Backend**: Flask, SQLAlchemy
@@ -11,7 +11,7 @@
 - **Authentication**: JWT
 - **Styling**: CSS (custom)
 
-## 📦 Getting Started
+## Getting Started
 
 ### 1. Clone the repository
 
