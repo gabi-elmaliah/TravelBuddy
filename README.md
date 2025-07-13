@@ -64,3 +64,41 @@ OPENAI_API_KEY=your_openai_api_key_here
 - Save and view liked trips
 
 - Dashboard for questionnaire results and trip suggestions
+
+## API Endpoints
+
+### Authentication
+
+| Endpoint       | Method | Description                    |
+|----------------|--------|--------------------------------|
+| `/sign-up`     | POST   | Create a new user              |
+| `/login`       | POST   | Authenticate user & return JWT |
+
+---
+
+### User Profile & Questionnaire
+
+| Endpoint                  | Method | Auth Required | Description                                  |
+|---------------------------|--------|----------------|----------------------------------------------|
+| `/submit-questionnaire`   | POST   | ✅ Yes         | Submit user’s personality and preferences     |
+
+---
+
+### Trip Generation & Preferences
+
+| Endpoint           | Method | Auth Required | Description                                     |
+|--------------------|--------|----------------|-------------------------------------------------|
+| `/generate-trip`   | POST   | ✅ Yes         | Generate a trip using OpenAI                    |
+| `/like-trip`       | POST   | ✅ Yes         | Like a generated trip                           |
+| `/unlike-trip/<id>`| DELETE | ✅ Yes         | Remove a liked trip                             |
+| `/user-trips`      | GET    | ✅ Yes         | Get list of trips liked by the user             |
+
+---
+
+### Clustering & Social Features
+
+| Endpoint           | Method | Auth Required | Description                                     |
+|--------------------|--------|----------------|-------------------------------------------------|
+| `/top-users`       | GET    | ✅ Yes         | Get top N most similar users in the same cluster|
+| `/daily-trip`      | GET    | ✅ Yes         | Get the assigned daily trip based on cluster    |
+| `/join-trip`       | POST   | ✅ Yes         | Join a group trip                               |
