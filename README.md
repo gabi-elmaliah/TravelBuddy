@@ -51,22 +51,16 @@ OPENAI_API_KEY=your_openai_api_key_here
 
 ## Features
 
--User registration and login with JWT
+- User registration and login with JWT
 
--Personality and travel preferences questionnaire
+- Personality and travel preferences questionnaire
 
--User clustering using the KMeans algorithm
+- User clustering using the KMeans algorithm
 
--View top 5 or 10 similar users
+- View top 5 or 10 similar users
 
--Generate AI-based trip itineraries using OpenAI
+- Generate AI-based trip itineraries using OpenAI
 
--Save and view liked trips
+- Save and view liked trips
 
--Dashboard for questionnaire results and trip suggestions
-
-
-
-
-
-
+- Dashboard for questionnaire results and trip suggestions
