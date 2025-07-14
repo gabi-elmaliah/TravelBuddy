@@ -100,3 +100,11 @@ OPENAI_API_KEY=your_openai_api_key_here
 | `/top-users`       | GET    |  Yes         | Get top N most similar users in the same cluster|
 | `/daily-trip`      | GET    |  Yes         | Get the assigned daily trip based on cluster    |
 | `/join-trip`       | POST   |  Yes         | Join a group trip                               |
+
+### ⚠️ Local-Only Deployment
+
+This project is designed to run **locally only**.  
+
+- The backend uses a local SQLite database.
+- The frontend and backend both run on `localhost`.
+- There is no cloud deployment or remote database configured.
